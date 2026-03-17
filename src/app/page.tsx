@@ -9,7 +9,7 @@ import Dashboard from './_components/admin/Dashboard';
 import ClientManagement from './_components/admin/ClientManagement';
 import ServiceManagement from './_components/admin/ServiceManagement';
 import { Button } from "@/components/ui/button";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster, toast } from "sonner";
 import { LayoutDashboard, Calendar, Users, Settings, LogOut, Scissors } from "lucide-react";
 
 export default function App() {
@@ -161,6 +161,17 @@ export default function App() {
         {view === 'booking' && (
           <div className="max-w-md mx-auto py-8">
              <div className="text-center mb-8 relative">
+                {/* Global Exit Button for Booking Flow */}
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="absolute right-0 -top-4 gap-1.5 h-8 px-2 text-xs text-muted-foreground hover:text-destructive transition-colors"
+                  onClick={handleLogout}
+                >
+                  Sair do App
+                  <LogOut className="w-3.5 h-3.5" />
+                </Button>
+
                 {bookingStep > 1 && (
                   <Button 
                     variant="ghost" 
@@ -180,7 +191,7 @@ export default function App() {
                     className="absolute right-0 top-0 gap-1.5 h-8 px-2 text-xs text-muted-foreground hover:text-destructive"
                     onClick={() => setBookingStep(1)}
                   >
-                    Sair/Reiniciar
+                    Reiniciar
                     <LogOut className="w-3.5 h-3.5" />
                   </Button>
                 )}
