@@ -35,7 +35,7 @@ export default function ServiceManagement() {
            Catálogo de Serviços
         </h2>
         <Dialog open={isNewModalOpen} onOpenChange={setIsNewModalOpen}>
-          <DialogTrigger asChild>
+          <DialogTrigger>
             <Button className="gap-2 h-10 px-4 font-bold shadow-lg shadow-primary/20">
               <Plus className="w-4 h-4" />
               Novo Serviço
