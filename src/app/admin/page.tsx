@@ -5,14 +5,15 @@ import { useRouter } from 'next/navigation';
 import Dashboard from '../_components/admin/Dashboard';
 import ClientManagement from '../_components/admin/ClientManagement';
 import ServiceManagement from '../_components/admin/ServiceManagement';
+import StaffManagement from '../_components/admin/StaffManagement';
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from "sonner";
-import { LayoutDashboard, Users, Settings, LogOut, Scissors } from "lucide-react";
+import { LayoutDashboard, Users, Settings, LogOut, Scissors, UserCheck } from "lucide-react";
 
 export default function AdminPage() {
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [adminView, setAdminView] = useState('dashboard'); // 'dashboard', 'clients', 'services'
+  const [adminView, setAdminView] = useState('dashboard'); // 'dashboard', 'clients', 'services', 'staff'
 
   useEffect(() => {
     // Check if Cleiton is logging in
@@ -53,6 +54,7 @@ export default function AdminPage() {
       case 'dashboard': return <Dashboard />;
       case 'clients': return <ClientManagement />;
       case 'services': return <ServiceManagement />;
+      case 'staff': return <StaffManagement />;
       default: return <Dashboard />;
     }
   };
@@ -73,6 +75,14 @@ export default function AdminPage() {
             >
               <LayoutDashboard className="w-4 h-4" />
               Dashboard
+            </Button>
+            <Button 
+              variant={adminView === 'staff' ? 'default' : 'ghost'} 
+              className="w-full justify-start gap-3 h-11 px-4"
+              onClick={() => setAdminView('staff')}
+            >
+              <UserCheck className="w-4 h-4" />
+              Equipe
             </Button>
             <Button 
               variant={adminView === 'clients' ? 'default' : 'ghost'} 

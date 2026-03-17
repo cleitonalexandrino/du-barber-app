@@ -8,14 +8,15 @@ import BookingStep4 from './_components/booking/Step4';
 import Dashboard from './_components/admin/Dashboard';
 import ClientManagement from './_components/admin/ClientManagement';
 import ServiceManagement from './_components/admin/ServiceManagement';
+import StaffManagement from './_components/admin/StaffManagement';
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from "sonner";
-import { LayoutDashboard, Calendar, Users, Settings, LogOut, Scissors } from "lucide-react";
+import { LayoutDashboard, Calendar, Users, Settings, LogOut, Scissors, UserCheck } from "lucide-react";
 
 export default function App() {
   const [view, setView] = useState('booking'); // 'booking' or 'admin'
   const [bookingStep, setBookingStep] = useState(1);
-  const [adminView, setAdminView] = useState('dashboard'); // 'dashboard', 'clients', 'services'
+  const [adminView, setAdminView] = useState('dashboard'); // 'dashboard', 'clients', 'services', 'staff'
   const [showAdminSwitcher, setShowAdminSwitcher] = useState(false);
   
   const [bookingData, setBookingData] = useState({
@@ -82,6 +83,7 @@ export default function App() {
         case 'dashboard': return <Dashboard />;
         case 'clients': return <ClientManagement />;
         case 'services': return <ServiceManagement />;
+        case 'staff': return <StaffManagement />;
         default: return <Dashboard />;
       }
     }
@@ -126,8 +128,16 @@ export default function App() {
                 Dashboard
               </Button>
               <Button 
+                variant={adminView === 'staff' ? 'default' : 'ghost'} 
+                className="w-full justify-start gap-3 h-11 px-4 text-white"
+                onClick={() => setAdminView('staff')}
+              >
+                <UserCheck className="w-4 h-4" />
+                Equipe
+              </Button>
+              <Button 
                 variant={adminView === 'clients' ? 'default' : 'ghost'} 
-                className="w-full justify-start gap-3 h-11 px-4"
+                className="w-full justify-start gap-3 h-11 px-4 text-white"
                 onClick={() => setAdminView('clients')}
               >
                 <Users className="w-4 h-4" />
@@ -135,7 +145,7 @@ export default function App() {
               </Button>
               <Button 
                 variant={adminView === 'services' ? 'default' : 'ghost'} 
-                className="w-full justify-start gap-3 h-11 px-4"
+                className="w-full justify-start gap-3 h-11 px-4 text-white"
                 onClick={() => setAdminView('services')}
               >
                 <Settings className="w-4 h-4" />
