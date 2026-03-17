@@ -64,7 +64,13 @@ export default function StaffManagement() {
      // 1. Insert into barbers table
      const { data: barber, error } = await supabase
         .from('barbers')
-        .insert({ name, specialty: role, avatar_url: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`, rating: 5.0 })
+        .insert({ 
+           name, 
+           specialty: role, 
+           avatar_url: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`, 
+           rating: 5.0,
+           is_admin: is_admin // We should have this column or track it
+        })
         .select()
         .single();
 
@@ -81,7 +87,7 @@ export default function StaffManagement() {
               name, 
               email, 
               phone, 
-              password: 'admin123' // Default password
+              password: 'admin123' 
            });
         
         if (adminError) {
@@ -95,6 +101,34 @@ export default function StaffManagement() {
      setIsNewModalOpen(false);
      setNewMemberData({ name: '', role: 'Barbeiro', email: '', phone: '', is_admin: false });
      fetchStaff();
+  };
+
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+  const [memberToAdmin, setMemberToAdmin] = useState<any>(null);
+  const [adminFormData, setAdminFormData] = useState({ email: '', phone: '' });
+
+  const handlePromoteAdmin = async (e: any) => {
+    e.preventDefault();
+    const { error } = await supabase
+      .from('admins')
+      .insert({
+        name: memberToAdmin.name,
+        email: adminFormData.email,
+        phone: adminFormData.phone,
+        password: 'admin123'
+      });
+
+    if (error) {
+      toast.error('Erro ao promover para Admin: ' + error.message);
+    } else {
+      // Also update the barbers table to reflect admin status if needed
+      await supabase.from('barbers').update({ is_admin: true }).eq('id', memberToAdmin.id);
+      
+      toast.success(`${memberToAdmin.name} agora é Administrador!`);
+      setIsAdminModalOpen(false);
+      setAdminFormData({ email: '', phone: '' });
+      fetchStaff();
+    }
   };
 
   const handleDelete = async () => {
@@ -147,9 +181,9 @@ export default function StaffManagement() {
               </DialogHeader>
               <form onSubmit={handleCreate} className="grid gap-4 py-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Nome Completo</Label>
+                  <Label htmlFor="create-name">Nome Completo</Label>
                   <Input 
-                    id="name" 
+                    id="create-name" 
                     placeholder="Ex: Pedro Alvares" 
                     className="bg-muted border-0 h-11" 
                     required 
@@ -158,9 +192,9 @@ export default function StaffManagement() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="role">Cargo / Especialidade</Label>
+                  <Label htmlFor="create-role">Cargo / Especialidade</Label>
                   <Input 
-                    id="role" 
+                    id="create-role" 
                     placeholder="Ex: Barbeiro Senior" 
                     className="bg-muted border-0 h-11" 
                     required 
@@ -172,11 +206,11 @@ export default function StaffManagement() {
                 <div className="space-y-4 pt-2 border-t border-border mt-2">
                    <div className="flex items-center space-x-2">
                       <Checkbox 
-                        id="is_admin" 
+                        id="is_admin_check" 
                         checked={newMemberData.is_admin}
                         onCheckedChange={(checked) => setNewMemberData({...newMemberData, is_admin: !!checked})}
                       />
-                      <Label htmlFor="is_admin" className="font-bold cursor-pointer flex items-center gap-2">
+                      <Label htmlFor="is_admin_check" className="font-bold cursor-pointer flex items-center gap-2">
                         Dar Permissão de Admin 
                         <Shield className="w-3.5 h-3.5 text-yellow-500" />
                       </Label>
@@ -185,9 +219,9 @@ export default function StaffManagement() {
                    {newMemberData.is_admin && (
                      <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
                         <div className="space-y-2">
-                          <Label htmlFor="email">E-mail para Login</Label>
+                          <Label htmlFor="create-email">E-mail para Login</Label>
                           <Input 
-                            id="email" 
+                            id="create-email" 
                             type="email" 
                             placeholder="email@duadmin.com" 
                             className="bg-muted border-0 h-11" 
@@ -197,9 +231,9 @@ export default function StaffManagement() {
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="phone">Telefone / WhatsApp</Label>
+                          <Label htmlFor="create-phone">Telefone / WhatsApp</Label>
                           <Input 
-                            id="phone" 
+                            id="create-phone" 
                             placeholder="(00) 00000-0000" 
                             className="bg-muted border-0 h-11" 
                             required 
@@ -234,7 +268,7 @@ export default function StaffManagement() {
                 <TableHead className="font-bold text-foreground py-4">Colaborador</TableHead>
                 <TableHead className="font-bold text-foreground py-4">Cargo</TableHead>
                 <TableHead className="hidden md:table-cell font-bold text-foreground py-4">Avaliação</TableHead>
-                <TableHead className="w-[100px] text-right py-4">Ações</TableHead>
+                <TableHead className="w-[120px] text-right py-4">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -243,8 +277,15 @@ export default function StaffManagement() {
                   <TableCell className="py-4">
                       <div className="flex items-center gap-3">
                         <img src={member.avatar_url} alt={member.name} className="w-10 h-10 rounded-full border border-border bg-muted" />
-                        <div>
-                          <p className="font-bold text-foreground group-hover:text-primary transition-colors">{member.name}</p>
+                        <div className="flex flex-col">
+                          <div className="flex items-center gap-2">
+                            <p className="font-bold text-foreground group-hover:text-primary transition-colors">{member.name}</p>
+                            {member.is_admin && (
+                              <span className="bg-yellow-500/10 text-yellow-500 text-[9px] font-black px-1.5 py-0.5 rounded border border-yellow-500/20 uppercase tracking-tighter">
+                                Admin
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                   </TableCell>
@@ -254,6 +295,17 @@ export default function StaffManagement() {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {!member.is_admin && (
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-8 w-8 text-muted-foreground hover:text-yellow-500 hover:bg-yellow-500/10"
+                          title="Tornar Admin"
+                          onClick={() => { setMemberToAdmin(member); setIsAdminModalOpen(true); }}
+                        >
+                          <Shield className="h-4 w-4" />
+                        </Button>
+                      )}
                       <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
                         <Pencil className="h-4 w-4" />
                       </Button>
@@ -277,6 +329,52 @@ export default function StaffManagement() {
           </Table>
         )}
       </div>
+
+      {/* Modal para Tornar Admin */}
+      <Dialog open={isAdminModalOpen} onOpenChange={setIsAdminModalOpen}>
+        <DialogContent className="sm:max-w-[425px] bg-card border-border text-foreground">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Shield className="w-5 h-5 text-yellow-500" />
+              Tornar Administrador
+            </DialogTitle>
+            <DialogDescription>
+              Você está dando permissão total para <strong>{memberToAdmin?.name}</strong>. Ele poderá gerenciar toda a barbearia.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handlePromoteAdmin} className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="admin-email">E-mail para Acesso</Label>
+              <Input 
+                id="admin-email" 
+                type="email" 
+                placeholder="email@duadmin.com" 
+                className="bg-muted border-0 h-11" 
+                required 
+                value={adminFormData.email}
+                onChange={(e) => setAdminFormData({...adminFormData, email: e.target.value})}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="admin-phone">Telefone / WhatsApp</Label>
+              <Input 
+                id="admin-phone" 
+                placeholder="(00) 00000-0000" 
+                className="bg-muted border-0 h-11" 
+                required 
+                value={adminFormData.phone}
+                onChange={(e) => setAdminFormData({...adminFormData, phone: maskPhone(e.target.value)})}
+              />
+            </div>
+            <p className="text-[10px] text-muted-foreground uppercase text-center mt-2">
+              A senha padrão será <strong>admin123</strong>
+            </p>
+            <DialogFooter className="mt-4">
+              <Button type="submit" className="w-full h-12 font-bold bg-yellow-600 hover:bg-yellow-700">Confirmar Acesso Total</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
          <DialogContent className="bg-card border-border text-foreground">
