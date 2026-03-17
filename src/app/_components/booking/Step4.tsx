@@ -11,14 +11,25 @@ import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 
-export default function BookingStep4({ data, updateData, onBack, onComplete }: any) {
+export default function BookingStep4({ data, updateData, onBack, onComplete, loggedCustomer }: any) {
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: ''
+    name: loggedCustomer?.name || '',
+    phone: loggedCustomer?.phone || '',
+    email: loggedCustomer?.email || ''
   });
+
+  // Effect to sync if loggedCustomer changes or component mounts
+  React.useEffect(() => {
+    if (loggedCustomer) {
+      setFormData({
+        name: loggedCustomer.name,
+        phone: loggedCustomer.phone,
+        email: loggedCustomer.email || ''
+      });
+    }
+  }, [loggedCustomer]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

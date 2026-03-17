@@ -12,12 +12,14 @@ import StaffManagement from './_components/admin/StaffManagement';
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from "sonner";
 import { LayoutDashboard, Calendar, Users, Settings, LogOut, Scissors, UserCheck, ChevronLeft } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function App() {
   const [view, setView] = useState('booking'); // 'booking' or 'admin'
   const [bookingStep, setBookingStep] = useState(1);
   const [adminView, setAdminView] = useState('dashboard'); // 'dashboard', 'clients', 'services', 'staff'
   const [showAdminSwitcher, setShowAdminSwitcher] = useState(false);
+  const [loggedCustomer, setLoggedCustomer] = useState<any>(null);
   
   const [bookingData, setBookingData] = useState({
     service: null,
@@ -47,11 +49,53 @@ export default function App() {
     setView('booking');
     setBookingStep(1);
     setShowAdminSwitcher(false);
+    setLoggedCustomer(null);
     
     // 2. Clear URL and Refresh (Anti-Cache)
     const url = new URL(window.location.href);
     url.searchParams.delete('admin');
     window.location.href = url.origin + url.pathname;
+  };
+
+  const handleCustomerLogin = async () => {
+    const phone = prompt("Digite seu Telefone:");
+    if (!phone) return;
+    
+    const pass = prompt("Digite sua senha (padrão: cliente123):");
+    if (!pass) return;
+
+    const { data: customer, error } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('phone', phone)
+      .eq('password', pass)
+      .single();
+
+    if (error || !customer) {
+      toast.error("Cliente não encontrado ou senha incorreta.");
+      
+      const wantRegister = confirm("Deseja criar uma nova conta com esses dados?");
+      if (wantRegister) {
+        const name = prompt("Digite seu nome completo:");
+        if (name) {
+          const { data: newCustomer, error: regError } = await supabase
+            .from('clients')
+            .insert({ name, phone, password: pass })
+            .select()
+            .single();
+          
+          if (regError) {
+             toast.error("Erro ao cadastrar: " + regError.message);
+          } else {
+             setLoggedCustomer(newCustomer);
+             toast.success("Conta criada! Bem-vindo, " + name);
+          }
+        }
+      }
+    } else {
+      setLoggedCustomer(customer);
+      toast.success("Bem-vindo de volta, " + customer.name);
+    }
   };
 
   const handleAdminSwitch = () => {
@@ -79,6 +123,7 @@ export default function App() {
           <BookingStep4 
             data={bookingData} 
             updateData={setBookingData} 
+            loggedCustomer={loggedCustomer}
             onBack={prevStep} 
             onComplete={() => {
               setBookingStep(1);
@@ -199,6 +244,27 @@ export default function App() {
                      <span className="hidden sm:inline">Sair do App</span>
                      <LogOut className="w-4 h-4" />
                    </Button>
+                 </div>
+
+                 <div className="flex flex-col items-center mt-2 mb-2">
+                    {loggedCustomer ? (
+                      <div className="flex items-center gap-2 bg-secondary/10 px-3 py-1.5 rounded-full border border-secondary/20 transition-all hover:bg-secondary/20">
+                         <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-[10px] font-black text-white">
+                           {loggedCustomer.name.charAt(0)}
+                         </div>
+                         <span className="text-xs font-bold">{loggedCustomer.name}</span>
+                         <button onClick={() => setLoggedCustomer(null)} className="text-[10px] text-muted-foreground hover:text-destructive underline ml-1">Sair</button>
+                      </div>
+                    ) : (
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="text-[10px] uppercase tracking-widest font-black text-primary hover:bg-primary/5 h-7"
+                        onClick={handleCustomerLogin}
+                      >
+                        Entrar em minha conta
+                      </Button>
+                    )}
                  </div>
 
                  {bookingStep > 1 && (
