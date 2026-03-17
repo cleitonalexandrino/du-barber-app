@@ -16,6 +16,7 @@ export default function App() {
   const [view, setView] = useState('booking'); // 'booking' or 'admin'
   const [bookingStep, setBookingStep] = useState(1);
   const [adminView, setAdminView] = useState('dashboard'); // 'dashboard', 'clients', 'services'
+  const [showAdminSwitcher, setShowAdminSwitcher] = useState(false);
   
   const [bookingData, setBookingData] = useState({
     service: null,
@@ -28,6 +29,14 @@ export default function App() {
       email: ''
     }
   });
+
+  // Check for admin access via URL parameter
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') === 'true') {
+      setShowAdminSwitcher(true);
+    }
+  }, []);
 
   const nextStep = () => setBookingStep(prev => Math.min(prev + 1, 4));
   const prevStep = () => setBookingStep(prev => Math.max(prev - 1, 1));
@@ -42,6 +51,15 @@ export default function App() {
       time: null,
       customer: { name: '', phone: '', email: '' }
     });
+  };
+
+  const handleAdminSwitch = () => {
+    const pass = prompt("Digite a senha do administrador:");
+    if (pass === "admin123") { // Example password, you can change this
+      setView('admin');
+    } else {
+      alert("Acesso negado.");
+    }
   };
 
   const content = () => {
@@ -65,23 +83,25 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
-      {/* Navigation Switcher (Internal Demo Only) */}
-      <div className="fixed bottom-4 right-4 z-50 flex gap-2 opacity-30 hover:opacity-100 transition-opacity">
-        <Button 
-          variant={view === 'booking' ? 'default' : 'secondary'} 
-          size="sm"
-          onClick={() => setView('booking')}
-        >
-          Customer
-        </Button>
-        <Button 
-          variant={view === 'admin' ? 'default' : 'secondary'} 
-          size="sm"
-          onClick={() => setView('admin')}
-        >
-          Admin
-        </Button>
-      </div>
+      {/* Navigation Switcher (Hidden from Customers) */}
+      {showAdminSwitcher && (
+        <div className="fixed bottom-4 right-4 z-50 flex gap-2 opacity-30 hover:opacity-100 transition-opacity">
+          <Button 
+            variant={view === 'booking' ? 'default' : 'secondary'} 
+            size="sm"
+            onClick={() => setView('booking')}
+          >
+            Modo Cliente
+          </Button>
+          <Button 
+            variant={view === 'admin' ? 'default' : 'secondary'} 
+            size="sm"
+            onClick={handleAdminSwitch}
+          >
+            Modo Admin
+          </Button>
+        </div>
+      )}
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         {view === 'admin' && (
@@ -163,7 +183,7 @@ export default function App() {
                  <Scissors className="w-8 h-8 text-primary" />
                </div>
                <h1 className="text-2xl font-bold tracking-tight">Du Barber House</h1>
-               <p className="text-muted-foreground text-sm">Rua Hamílton Prado, 13</p>
+               <h2 className="text-muted-foreground text-sm">Rua Hamílton Prado, 13</h2>
                
                <div className="mt-8 flex justify-center gap-2">
                  {[1, 2, 3, 4].map(step => (
