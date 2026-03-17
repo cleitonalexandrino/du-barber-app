@@ -42,8 +42,10 @@ export default function App() {
   const prevStep = () => setBookingStep(prev => Math.max(prev - 1, 1));
 
   const handleLogout = () => {
+    // 1. Reset states
     setView('booking');
     setBookingStep(1);
+    setShowAdminSwitcher(false);
     setBookingData({
       service: null,
       barber: null,
@@ -51,6 +53,11 @@ export default function App() {
       time: null,
       customer: { name: '', phone: '', email: '' }
     });
+
+    // 2. Clear URL params and Refresh for security (Anti-Cache)
+    const url = new URL(window.location.href);
+    url.searchParams.delete('admin');
+    window.location.href = url.origin + url.pathname;
   };
 
   const handleAdminSwitch = () => {
