@@ -32,13 +32,25 @@ export default function App() {
   const nextStep = () => setBookingStep(prev => Math.min(prev + 1, 4));
   const prevStep = () => setBookingStep(prev => Math.max(prev - 1, 1));
 
+  const handleLogout = () => {
+    setView('booking');
+    setBookingStep(1);
+    setBookingData({
+      service: null,
+      barber: null,
+      date: null,
+      time: null,
+      customer: { name: '', phone: '', email: '' }
+    });
+  };
+
   const content = () => {
     if (view === 'booking') {
       switch (bookingStep) {
         case 1: return <BookingStep1 data={bookingData} updateData={setBookingData} onNext={nextStep} />;
         case 2: return <BookingStep2 data={bookingData} updateData={setBookingData} onNext={nextStep} onBack={prevStep} />;
         case 3: return <BookingStep3 data={bookingData} updateData={setBookingData} onNext={nextStep} onBack={prevStep} />;
-        case 4: return <BookingStep4 data={bookingData} updateData={setBookingData} onBack={prevStep} onComplete={() => { alert('Agendamento Realizado!'); setBookingStep(1); }} />;
+        case 4: return <BookingStep4 data={bookingData} updateData={setBookingData} onBack={prevStep} onComplete={() => setBookingStep(1)} />;
         default: return <BookingStep1 data={bookingData} updateData={setBookingData} onNext={nextStep} />;
       }
     } else {
@@ -54,7 +66,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* Navigation Switcher (Internal Demo Only) */}
-      <div className="fixed bottom-4 right-4 z-50 flex gap-2 opacity-50 hover:opacity-100 transition-opacity">
+      <div className="fixed bottom-4 right-4 z-50 flex gap-2 opacity-30 hover:opacity-100 transition-opacity">
         <Button 
           variant={view === 'booking' ? 'default' : 'secondary'} 
           size="sm"
@@ -77,11 +89,11 @@ export default function App() {
             <aside className="space-y-2">
               <div className="mb-8 flex items-center gap-2 px-2">
                 <Scissors className="w-6 h-6 text-primary" />
-                <h1 className="text-xl font-bold tracking-tight">DU BARBER</h1>
+                <h1 className="text-xl font-bold tracking-tight text-white">DU BARBER</h1>
               </div>
               <Button 
                 variant={adminView === 'dashboard' ? 'default' : 'ghost'} 
-                className="w-full justify-start gap-2"
+                className="w-full justify-start gap-3 h-11 px-4"
                 onClick={() => setAdminView('dashboard')}
               >
                 <LayoutDashboard className="w-4 h-4" />
@@ -89,7 +101,7 @@ export default function App() {
               </Button>
               <Button 
                 variant={adminView === 'clients' ? 'default' : 'ghost'} 
-                className="w-full justify-start gap-2"
+                className="w-full justify-start gap-3 h-11 px-4"
                 onClick={() => setAdminView('clients')}
               >
                 <Users className="w-4 h-4" />
@@ -97,16 +109,20 @@ export default function App() {
               </Button>
               <Button 
                 variant={adminView === 'services' ? 'default' : 'ghost'} 
-                className="w-full justify-start gap-2"
+                className="w-full justify-start gap-3 h-11 px-4"
                 onClick={() => setAdminView('services')}
               >
                 <Settings className="w-4 h-4" />
                 Serviços
               </Button>
               <div className="pt-8 mt-8 border-t border-border">
-                <Button variant="ghost" className="w-full justify-start gap-2 text-muted-foreground">
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start gap-3 h-11 px-4 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                  onClick={handleLogout}
+                >
                   <LogOut className="w-4 h-4" />
-                  Sair
+                  Sair do Painel
                 </Button>
               </div>
             </aside>
@@ -118,7 +134,31 @@ export default function App() {
 
         {view === 'booking' && (
           <div className="max-w-md mx-auto py-8">
-             <div className="text-center mb-8">
+             <div className="text-center mb-8 relative">
+                {bookingStep > 1 && (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="absolute left-0 top-0 gap-1.5 h-8 px-2 text-xs text-muted-foreground"
+                    onClick={prevStep}
+                  >
+                    <LogOut className="w-3.5 h-3.5 rotate-180" />
+                    Voltar
+                  </Button>
+                )}
+                
+                {bookingStep > 1 && (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="absolute right-0 top-0 gap-1.5 h-8 px-2 text-xs text-muted-foreground hover:text-destructive"
+                    onClick={() => setBookingStep(1)}
+                  >
+                    Sair/Reiniciar
+                    <LogOut className="w-3.5 h-3.5" />
+                  </Button>
+                )}
+
                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4 animate-in fade-in zoom-in duration-500">
                  <Scissors className="w-8 h-8 text-primary" />
                </div>
