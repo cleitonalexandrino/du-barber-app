@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Confirmação de Agendamento - Du Barber House</title>
+<!-- BEGIN: Scripts and Styles -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            border: "hsl(240 3.7% 15.9%)",
+            input: "hsl(240 3.7% 15.9%)",
+            ring: "hsl(240 4.9% 83.9%)",
+            background: "hsl(240 10% 3.9%)",
+            foreground: "hsl(0 0% 98%)",
+            primary: {
+              DEFAULT: "#EF4444",
+              foreground: "hsl(0 0% 98%)",
+            },
+            secondary: {
+              DEFAULT: "hsl(240 3.7% 15.9%)",
+              foreground: "hsl(0 0% 98%)",
+            },
+            muted: {
+              DEFAULT: "hsl(240 3.7% 15.9%)",
+              foreground: "hsl(240 5% 64.9%)",
+            },
+            accent: {
+              DEFAULT: "hsl(240 3.7% 15.9%)",
+              foreground: "hsl(0 0% 98%)",
+            },
+            card: {
+              DEFAULT: "hsl(240 10% 3.9%)",
+              foreground: "hsl(0 0% 98%)",
+            },
+          },
+          borderRadius: {
+            lg: "0.5rem",
+            md: "calc(0.5rem - 2px)",
+            sm: "calc(0.5rem - 4px)",
+          },
+        },
+      },
+    }
+  </script>
+<style data-purpose="custom-shadows">
+    .shadcn-card {
+      border: 1px solid hsl(240 3.7% 15.9%);
+      background-color: hsl(240 10% 3.9%);
+    }
+  </style>
+<!-- END: Scripts and Styles -->
+</head>
+<body class="bg-background text-foreground min-h-screen font-sans antialiased">
+<!-- BEGIN: MainHeader -->
+<header class="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+<div class="container flex h-14 items-center px-4">
+<div class="flex items-center gap-4">
+<!-- Back button icon -->
+<button class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<svg class="h-5 w-5" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"></path></svg>
+</button>
+<h1 class="text-lg font-semibold tracking-tight">Confirmação</h1>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<main class="container max-w-md mx-auto p-4 space-y-6">
+<!-- BEGIN: BookingSummary -->
+<section class="rounded-xl border border-border bg-card p-6 shadow-sm" data-purpose="summary-card">
+<h2 class="text-sm font-medium text-muted-foreground mb-4 uppercase tracking-wider">Resumo do Agendamento</h2>
+<div class="space-y-4">
+<!-- Service Detail -->
+<div class="flex items-start gap-3">
+<div class="mt-0.5 rounded-full bg-primary/10 p-2">
+<svg fill="none" height="16" stroke="#EF4444" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M3 14h18"></path><path d="M20 10c0-4.4-3.6-8-8-8s-8 3.6-8 8"></path><path d="M2 18h20"></path><path d="M21 14v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg>
+</div>
+<div>
+<p class="text-xs text-muted-foreground">Serviço</p>
+<p class="text-sm font-medium">Corte Degradê &amp; Barba</p>
+</div>
+</div>
+<!-- Barber Detail -->
+<div class="flex items-start gap-3">
+<div class="mt-0.5 rounded-full bg-primary/10 p-2">
+<svg fill="none" height="16" stroke="#EF4444" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+</div>
+<div>
+<p class="text-xs text-muted-foreground">Barbeiro</p>
+<p class="text-sm font-medium">Eduardo Silva</p>
+</div>
+</div>
+<!-- Date & Time Detail -->
+<div class="flex items-start gap-3">
+<div class="mt-0.5 rounded-full bg-primary/10 p-2">
+<svg fill="none" height="16" stroke="#EF4444" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
+</div>
+<div>
+<p class="text-xs text-muted-foreground">Data e Horário</p>
+<p class="text-sm font-medium">25 de Outubro às 14:30</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: BookingSummary -->
+<!-- BEGIN: AuthenticationForm -->
+<section class="space-y-4" data-purpose="booking-form">
+<div class="space-y-2">
+<h2 class="text-lg font-semibold tracking-tight">Seus Dados</h2>
+<p class="text-sm text-muted-foreground">Preencha as informações abaixo para finalizar o seu agendamento na Du Barber House.</p>
+</div>
+<form class="space-y-4" id="booking-confirmation-form">
+<!-- Full Name Field -->
+<div class="space-y-2">
+<label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="full-name">
+            Nome Completo
+          </label>
+<input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="full-name" placeholder="Ex: João Silva" required="" type="text"/>
+</div>
+<!-- WhatsApp Field -->
+<div class="space-y-2">
+<label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="whatsapp">
+            WhatsApp (com DDD)
+          </label>
+<input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="whatsapp" placeholder="(11) 99999-9999" required="" type="tel"/>
+</div>
+<!-- Email Field -->
+<div class="space-y-2">
+<label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="email">
+            Email
+          </label>
+<input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="email" placeholder="seu@email.com" required="" type="email"/>
+</div>
+<!-- Footer Privacy Note -->
+<p class="text-[12px] text-muted-foreground text-center py-2">
+          Ao clicar em confirmar, você concorda com nossos termos de agendamento.
+        </p>
+<!-- Primary CTA Button -->
+<button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-12 w-full shadow-lg" type="submit">
+          Confirmar Agendamento
+        </button>
+</form>
+</section>
+<!-- END: AuthenticationForm -->
+</main>
+<!-- BEGIN: FormHandler -->
+<script data-purpose="event-handlers">
+    document.getElementById('booking-confirmation-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Logic for booking confirmation would go here
+      alert('Agendamento enviado com sucesso!');
+    });
+  </script>
+<!-- END: FormHandler -->
+</body></html>

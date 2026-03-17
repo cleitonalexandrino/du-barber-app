@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Du Barber House - Admin Dashboard</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            border: "hsl(240 3.7% 15.9%)",
+            background: "hsl(240 10% 3.9%)",
+            foreground: "hsl(0 0% 98%)",
+            card: "hsl(240 10% 3.9%)",
+            "card-foreground": "hsl(0 0% 98%)",
+            primary: "#EF4444", // Red Accent
+            secondary: "#3B82F6", // Blue Accent
+            muted: "hsl(240 3.7% 15.9%)",
+            "muted-foreground": "hsl(240 5% 64.9%)",
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scrollbar">
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-background text-foreground font-sans antialiased pb-24">
+<!-- BEGIN: TopNavbar -->
+<header class="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+<div class="flex h-16 items-center justify-between px-4">
+<div class="flex items-center gap-2">
+<!-- Brand Logo Placeholder -->
+<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white font-bold">D</div>
+<span class="text-lg font-bold tracking-tight">Du Barber House</span>
+</div>
+<div class="flex items-center gap-4">
+<!-- User Profile Avatar -->
+<button class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-full border border-border">
+<img alt="User Profile" class="aspect-square h-full w-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqJrMBOslME30U9QtCYNxH1heEc6hR3HbpMVWTqfT8l9-O56hT_P7z82zyTitwlwClBPMLWrMjibxBArFqe1hJ2bphGBt9losTlZTC6S0LS6gJ6M2sZtLR1zUHv3oBdO3no9LR19X6UwlcUmkmpSiLQlVpAO2BTxoWraHWNt2H-OGjoLXbDAKZz32d9AO6mUIhUjHcmcieQOufAgryzH6MUhAOCUUSTIA6shicIrJwNAggaZ1f0IexHpUxl-POFb1ZGLTaCG2LmVbQ"/>
+</button>
+</div>
+</div>
+</header>
+<!-- END: TopNavbar -->
+<main class="p-4 space-y-6">
+<!-- BEGIN: KPISection -->
+<section class="grid grid-cols-2 gap-4" id="kpi-cards">
+<!-- Card 1 -->
+<div class="rounded-xl border border-border bg-card p-4 shadow-sm" data-purpose="kpi-card">
+<p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Faturamento Hoje</p>
+<div class="mt-2 flex items-baseline gap-1">
+<span class="text-xl font-bold text-primary">R$ 1.250</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="rounded-xl border border-border bg-card p-4 shadow-sm" data-purpose="kpi-card">
+<p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Faturamento Mês</p>
+<div class="mt-2 flex items-baseline gap-1">
+<span class="text-xl font-bold">R$ 12.800</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="rounded-xl border border-border bg-card p-4 shadow-sm" data-purpose="kpi-card">
+<p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Agendamentos</p>
+<div class="mt-2 flex items-baseline gap-1">
+<span class="text-xl font-bold text-secondary">14</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="rounded-xl border border-border bg-card p-4 shadow-sm" data-purpose="kpi-card">
+<p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">A Receber</p>
+<div class="mt-2 flex items-baseline gap-1">
+<span class="text-xl font-bold">R$ 450</span>
+</div>
+</div>
+</section>
+<!-- END: KPISection -->
+<!-- BEGIN: RevenueChart -->
+<section class="rounded-xl border border-border bg-card p-4 shadow-sm" id="revenue-overview">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-semibold">Tendência de Receita</h3>
+<span class="text-[10px] text-muted-foreground">Últimos 7 dias</span>
+</div>
+<div class="h-32 w-full">
+<!-- Simulated Area Chart using Canvas -->
+<canvas class="w-full h-full" id="revenueChart"></canvas>
+</div>
+</section>
+<!-- END: RevenueChart -->
+<!-- BEGIN: DailyAgenda -->
+<section class="space-y-4" id="daily-agenda">
+<div class="flex items-center justify-between px-1">
+<h3 class="text-lg font-bold tracking-tight">Agenda do Dia</h3>
+<button class="text-xs text-secondary font-medium">Ver tudo</button>
+</div>
+<div class="space-y-3">
+<!-- Appointment Item 1 -->
+<div class="flex gap-4 relative">
+<div class="flex flex-col items-center w-12 pt-1 shrink-0">
+<span class="text-sm font-bold">09:00</span>
+<div class="w-0.5 h-full bg-border my-2"></div>
+</div>
+<div class="flex-1 rounded-lg border border-border bg-card p-3 mb-2" data-purpose="appointment-card">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-semibold text-sm">João Silva</h4>
+<p class="text-xs text-muted-foreground">Corte + Barba</p>
+</div>
+<span class="inline-flex items-center rounded-full bg-green-500/10 px-2 py-0.5 text-[10px] font-medium text-green-500 ring-1 ring-inset ring-green-500/20">Confirmado</span>
+</div>
+<div class="mt-2 flex items-center gap-2">
+<div class="h-4 w-4 rounded-full bg-primary/20 flex items-center justify-center">
+<div class="h-1.5 w-1.5 rounded-full bg-primary"></div>
+</div>
+<span class="text-[11px] text-muted-foreground">Barbeiro: Marcos</span>
+</div>
+</div>
+</div>
+<!-- Appointment Item 2 -->
+<div class="flex gap-4 relative">
+<div class="flex flex-col items-center w-12 pt-1 shrink-0">
+<span class="text-sm font-bold">10:30</span>
+<div class="w-0.5 h-full bg-border my-2"></div>
+</div>
+<div class="flex-1 rounded-lg border border-border bg-card p-3 mb-2" data-purpose="appointment-card">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-semibold text-sm">Ricardo Mendes</h4>
+<p class="text-xs text-muted-foreground">Degradê Navalhado</p>
+</div>
+<span class="inline-flex items-center rounded-full bg-yellow-500/10 px-2 py-0.5 text-[10px] font-medium text-yellow-500 ring-1 ring-inset ring-yellow-500/20">Pendente</span>
+</div>
+<div class="mt-2 flex items-center gap-2">
+<div class="h-4 w-4 rounded-full bg-secondary/20 flex items-center justify-center">
+<div class="h-1.5 w-1.5 rounded-full bg-secondary"></div>
+</div>
+<span class="text-[11px] text-muted-foreground">Barbeiro: Bruno</span>
+</div>
+</div>
+</div>
+<!-- Appointment Item 3 -->
+<div class="flex gap-4 relative">
+<div class="flex flex-col items-center w-12 pt-1 shrink-0">
+<span class="text-sm font-bold">11:15</span>
+<div class="w-0.5 h-full bg-border my-2"></div>
+</div>
+<div class="flex-1 rounded-lg border border-border bg-card p-3 mb-2" data-purpose="appointment-card">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-semibold text-sm">Pedro Afonso</h4>
+<p class="text-xs text-muted-foreground">Corte Tesoura</p>
+</div>
+<span class="inline-flex items-center rounded-full bg-green-500/10 px-2 py-0.5 text-[10px] font-medium text-green-500 ring-1 ring-inset ring-green-500/20">Confirmado</span>
+</div>
+<div class="mt-2 flex items-center gap-2">
+<div class="h-4 w-4 rounded-full bg-primary/20 flex items-center justify-center">
+<div class="h-1.5 w-1.5 rounded-full bg-primary"></div>
+</div>
+<span class="text-[11px] text-muted-foreground">Barbeiro: Marcos</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: DailyAgenda -->
+</main>
+<!-- BEGIN: BottomNavigation -->
+<nav class="fixed bottom-0 left-0 z-50 w-full h-16 bg-background border-t border-border px-6">
+<div class="grid h-full max-w-lg grid-cols-4 mx-auto">
+<button class="inline-flex flex-col items-center justify-center group" type="button">
+<svg class="w-6 h-6 mb-1 text-primary" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[10px] font-medium text-primary">Dashboard</span>
+</button>
+<button class="inline-flex flex-col items-center justify-center group text-muted-foreground" type="button">
+<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[10px] font-medium">Agenda</span>
+</button>
+<button class="inline-flex flex-col items-center justify-center group text-muted-foreground" type="button">
+<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[10px] font-medium">Clientes</span>
+</button>
+<button class="inline-flex flex-col items-center justify-center group text-muted-foreground" type="button">
+<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758L5 19m0-14l4.121 4.121" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[10px] font-medium">Serviços</span>
+</button>
+</div>
+</nav>
+<!-- END: BottomNavigation -->
+<!-- BEGIN: ChartScripts -->
+<script data-purpose="canvas-setup">
+    const canvas = document.getElementById('revenueChart');
+    const ctx = canvas.getContext('2d');
+
+    // Scaling for high DPI displays
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+
+    function drawChart() {
+      const width = rect.width;
+      const height = rect.height;
+      const data = [30, 45, 35, 60, 55, 80, 70]; // Dummy data points
+      const stepX = width / (data.length - 1);
+      
+      ctx.clearRect(0, 0, width, height);
+
+      // Create Gradient
+      const gradient = ctx.createLinearGradient(0, 0, 0, height);
+      gradient.addColorStop(0, 'rgba(59, 130, 246, 0.4)');
+      gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+
+      // Draw Area
+      ctx.beginPath();
+      ctx.moveTo(0, height);
+      data.forEach((val, i) => {
+        const x = i * stepX;
+        const y = height - (val / 100 * height);
+        ctx.lineTo(x, y);
+      });
+      ctx.lineTo(width, height);
+      ctx.closePath();
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // Draw Line
+      ctx.beginPath();
+      data.forEach((val, i) => {
+        const x = i * stepX;
+        const y = height - (val / 100 * height);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = '#3B82F6';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // Initial draw
+    window.onload = drawChart;
+    window.onresize = drawChart;
+  </script>
+<!-- END: ChartScripts -->
+</body></html>

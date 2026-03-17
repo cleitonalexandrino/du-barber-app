@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Du Barber House - Seleção de Profissional</title>
+<!-- BEGIN: Scripts -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            border: "hsl(240 3.7% 15.9%)",
+            background: "hsl(240 10% 3.9%)",
+            foreground: "hsl(0 0% 98%)",
+            card: "hsl(240 10% 3.9%)",
+            "card-foreground": "hsl(0 0% 98%)",
+            accent: "#3B82F6",
+            primary: "#EF4444",
+          }
+        }
+      }
+    }
+  </script>
+<!-- END: Scripts -->
+<style data-purpose="custom-shadows">
+    .shadcn-card {
+      border: 1px solid hsl(240 3.7% 15.9%);
+      transition: all 0.2s ease-in-out;
+    }
+    .shadcn-card.selected {
+      border-color: #3B82F6;
+      background-color: rgba(59, 130, 246, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-background text-foreground min-h-screen font-sans antialiased">
+<!-- BEGIN: Main Container -->
+<main class="max-w-md mx-auto px-4 py-6 flex flex-col min-h-screen">
+<!-- BEGIN: Header -->
+<header class="mb-8 pt-4">
+<div class="flex items-center justify-between mb-2">
+<button class="text-zinc-400 hover:text-white flex items-center gap-1 transition-colors" data-purpose="back-button">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"></path></svg>
+<span class="text-sm font-medium">Voltar</span>
+</button>
+<span class="text-xs text-zinc-500 uppercase tracking-widest font-semibold">Passo 2 de 4</span>
+</div>
+<h1 class="text-2xl font-bold tracking-tight">Escolha o Profissional</h1>
+<p class="text-zinc-400 text-sm mt-1">Selecione quem cuidará do seu visual hoje.</p>
+</header>
+<!-- END: Header -->
+<!-- BEGIN: Barber List -->
+<section class="flex-grow space-y-3" data-purpose="professional-selection">
+<!-- Option: Any Professional -->
+<div class="shadcn-card selected rounded-xl p-4 flex items-center gap-4 cursor-pointer" data-purpose="barber-card">
+<div class="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center border border-zinc-700">
+<svg class="text-zinc-400" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+</div>
+<div class="flex-grow">
+<h3 class="font-semibold text-base">Qualquer profissional</h3>
+<p class="text-xs text-zinc-400">O que estiver disponível mais cedo</p>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-accent flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-accent"></div>
+</div>
+</div>
+<!-- Professional: Biel -->
+<div class="shadcn-card rounded-xl p-4 flex items-center gap-4 cursor-pointer hover:bg-zinc-900/50" data-purpose="barber-card">
+<img alt="Biel Avatar" class="w-12 h-12 rounded-full object-cover border border-zinc-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHGtK3bSAAcRm69KNOmJ_iPDEGAt8fIsvXYXLrA_s74T2UohW7-2PKQToEC9KV6WbE9RPu8fCj5CG-ClPQxMmArIijmtvp_vbd_fuNUTbdzZC_khgUUw-C6OVqZY7Y3__4t_lQo3WP6iUfgHXBTzv95fwI9WqKFbDdgiXkz5uB_A2ZSNCQmNIA9iXXFW7s63fdoOhnyNBPPszH5pDkCECeefYJcWOYzN9KM-lmZ09agnyC2z3N3TqTvGaRQr2gJUUDc75degz-lUxh"/>
+<div class="flex-grow">
+<div class="flex items-center gap-2">
+<h3 class="font-semibold text-base">Biel</h3>
+<span class="flex items-center text-[10px] bg-zinc-800 px-1.5 py-0.5 rounded text-yellow-500 font-bold">
+<svg class="mr-0.5" fill="currentColor" height="10" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>
+              4.9
+            </span>
+</div>
+<p class="text-xs text-zinc-400">Especialista em Degradê e Barba</p>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-zinc-700"></div>
+</div>
+<!-- Professional: Eduan -->
+<div class="shadcn-card rounded-xl p-4 flex items-center gap-4 cursor-pointer hover:bg-zinc-900/50" data-purpose="barber-card">
+<img alt="Eduan Avatar" class="w-12 h-12 rounded-full object-cover border border-zinc-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwBvwWG7kVPx-JPZs4J3LRcKqaoQhChHdjLoU8pSURu85vzZJT1AH_ecflzzmEIjAYQyUEtesC6sSI-1gWwmi5lVcBUkhJzEAb1MhhEoOY1Osz7Dok9bc957FyYEw4AuIcZuRb_mQxNDmjftF0ZHXiB5QSBxdJZoFSpnspUzNx-mhliWSC0JRUcp3IoiFOHd2nlXUwMuKIifntbOMaXqwxiOFMog6byHWEL0Nev0GYYeTnBT7yeltBgs7IeEOmge_6Pyzl2ORLJ8DF"/>
+<div class="flex-grow">
+<div class="flex items-center gap-2">
+<h3 class="font-semibold text-base">Eduan</h3>
+<span class="flex items-center text-[10px] bg-zinc-800 px-1.5 py-0.5 rounded text-yellow-500 font-bold">
+<svg class="mr-0.5" fill="currentColor" height="10" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>
+              5.0
+            </span>
+</div>
+<p class="text-xs text-zinc-400">Corte Tesoura e Freestyle</p>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-zinc-700"></div>
+</div>
+</section>
+<!-- END: Barber List -->
+<!-- BEGIN: Footer Actions -->
+<footer class="mt-auto py-6">
+<button class="w-full bg-primary hover:bg-red-600 text-white font-bold py-4 rounded-xl shadow-lg transition-transform active:scale-[0.98]" data-purpose="next-button">
+        Próximo
+      </button>
+<p class="text-center text-zinc-500 text-xs mt-4">
+        Ao continuar, você concorda com nossos termos de agendamento.
+      </p>
+</footer>
+<!-- END: Footer Actions -->
+</main>
+<!-- END: Main Container -->
+</body></html>

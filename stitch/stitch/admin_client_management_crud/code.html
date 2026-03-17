@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestão de Clientes - Du Barber House</title>
+<!-- BEGIN: Scripts and Meta -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            border: "hsl(240 3.7% 15.9%)",
+            input: "hsl(240 3.7% 15.9%)",
+            ring: "hsl(240 4.9% 83.9%)",
+            background: "hsl(240 10% 3.9%)",
+            foreground: "hsl(0 0% 98%)",
+            primary: {
+              DEFAULT: "hsl(217.2 91.2% 59.8%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            secondary: {
+              DEFAULT: "hsl(240 3.7% 15.9%)",
+              foreground: "hsl(0 0% 98%)",
+            },
+            destructive: {
+              DEFAULT: "hsl(0 62.8% 30.6%)",
+              foreground: "hsl(0 0% 98%)",
+            },
+            muted: {
+              DEFAULT: "hsl(240 3.7% 15.9%)",
+              foreground: "hsl(240 5% 64.9%)",
+            },
+            accent: {
+              DEFAULT: "hsl(240 3.7% 15.9%)",
+              foreground: "hsl(0 0% 98%)",
+            },
+            popover: {
+              DEFAULT: "hsl(240 10% 3.9%)",
+              foreground: "hsl(0 0% 98%)",
+            },
+            card: {
+              DEFAULT: "hsl(240 10% 3.9%)",
+              foreground: "hsl(0 0% 98%)",
+            },
+          },
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-shadows">
+    .shadcn-border { border: 1px solid hsl(240 3.7% 15.9%); }
+    .toast-slide-up {
+      animation: slideUp 0.3s ease-out forwards;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+<!-- END: Scripts and Meta -->
+</head>
+<body class="bg-background text-foreground antialiased min-h-screen flex flex-col font-sans">
+<!-- BEGIN: MainHeader -->
+<header class="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur px-4 py-4" data-purpose="page-header">
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h1 class="text-xl font-semibold tracking-tight">Gestão de Clientes</h1>
+<!-- Novo Cliente Button -->
+<button class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2" data-purpose="add-client-btn">
+<svg class="mr-2" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+          Novo Cliente
+        </button>
+</div>
+<!-- Search Bar -->
+<div class="relative w-full" data-purpose="search-container">
+<svg class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+<input class="flex h-10 w-full rounded-md border border-input bg-background px-10 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" placeholder="Pesquisar por nome..." type="text"/>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: ClientListTable -->
+<main class="flex-1 p-4" data-purpose="main-content">
+<div class="rounded-md border border-border">
+<div class="relative w-full overflow-auto">
+<table class="w-full caption-bottom text-sm" id="clients-table">
+<thead class="[&amp;_tr]:border-b border-border">
+<tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Nome</th>
+<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Último Corte</th>
+<th class="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Total Gasto</th>
+<th class="h-12 px-4 align-middle font-medium text-muted-foreground text-center">Ações</th>
+</tr>
+</thead>
+<tbody class="[&amp;_tr:last-child]:border-0">
+<!-- Table Row 1 -->
+<tr class="border-b transition-colors hover:bg-muted/50">
+<td class="p-4 align-middle font-medium">Ricardo Silva</td>
+<td class="p-4 align-middle">12/10/2023</td>
+<td class="p-4 align-middle text-right">R$ 450,00</td>
+<td class="p-4 align-middle">
+<div class="flex items-center justify-center gap-2">
+<button class="h-8 w-8 inline-flex items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors" title="Editar">
+<svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>
+</button>
+<button class="h-8 w-8 inline-flex items-center justify-center rounded-md text-destructive hover:bg-destructive/10 transition-colors" title="Excluir">
+<svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+</button>
+</div>
+</td>
+</tr>
+<!-- Table Row 2 -->
+<tr class="border-b transition-colors hover:bg-muted/50">
+<td class="p-4 align-middle font-medium">Marcos Oliveira</td>
+<td class="p-4 align-middle">05/10/2023</td>
+<td class="p-4 align-middle text-right">R$ 320,00</td>
+<td class="p-4 align-middle">
+<div class="flex items-center justify-center gap-2">
+<button class="h-8 w-8 inline-flex items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+<svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>
+</button>
+<button class="h-8 w-8 inline-flex items-center justify-center rounded-md text-destructive hover:bg-destructive/10 transition-colors">
+<svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+</button>
+</div>
+</td>
+</tr>
+<!-- Table Row 3 -->
+<tr class="border-b transition-colors hover:bg-muted/50">
+<td class="p-4 align-middle font-medium">Felipe Santos</td>
+<td class="p-4 align-middle">28/09/2023</td>
+<td class="p-4 align-middle text-right">R$ 890,00</td>
+<td class="p-4 align-middle">
+<div class="flex items-center justify-center gap-2">
+<button class="h-8 w-8 inline-flex items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+<svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>
+</button>
+<button class="h-8 w-8 inline-flex items-center justify-center rounded-md text-destructive hover:bg-destructive/10 transition-colors">
+<svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- END: ClientListTable -->
+<!-- BEGIN: ToastNotification -->
+<div class="fixed bottom-6 left-4 right-4 z-50 flex justify-center pointer-events-none" data-purpose="toast-container">
+<div class="toast-slide-up flex items-center gap-3 bg-secondary text-foreground border border-border px-4 py-3 rounded-lg shadow-lg pointer-events-auto" data-purpose="removal-notification" role="alert">
+<div class="h-2 w-2 rounded-full bg-blue-500"></div>
+<p class="text-sm font-medium">Cliente removido com sucesso</p>
+<button class="ml-auto text-muted-foreground hover:text-foreground" onclick="this.parentElement.remove()">
+<svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+</button>
+</div>
+</div>
+<!-- END: ToastNotification -->
+<script data-purpose="interaction-logic">
+    // Minimal interaction logic for demo purposes
+    document.querySelectorAll('[title="Excluir"]').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const row = e.target.closest('tr');
+        if (confirm('Deseja realmente excluir este cliente?')) {
+          row.style.opacity = '0.5';
+          row.style.pointerEvents = 'none';
+          // In a real app, you'd trigger the toast here after API success
+        }
+      });
+    });
+  </script>
+</body></html>

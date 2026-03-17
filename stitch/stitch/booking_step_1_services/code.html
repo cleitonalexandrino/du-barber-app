@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Booking - Du Barber House</title>
+<!-- Tailwind CSS CDN with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            border: "hsl(240 3.7% 15.9%)",
+            input: "hsl(240 3.7% 15.9%)",
+            ring: "hsl(240 4.9% 83.9%)",
+            background: "hsl(240 10% 3.9%)",
+            foreground: "hsl(0 0% 98%)",
+            primary: {
+              DEFAULT: "#EF4444", // Red for action
+              foreground: "hsl(0 0% 98%)",
+            },
+            secondary: {
+              DEFAULT: "hsl(240 3.7% 15.9%)",
+              foreground: "hsl(0 0% 98%)",
+            },
+            accent: {
+              DEFAULT: "#3B82F6", // Blue for selection
+              foreground: "hsl(0 0% 98%)",
+            },
+            muted: {
+              DEFAULT: "hsl(240 3.7% 15.9%)",
+              foreground: "hsl(240 5% 64.9%)",
+            },
+            card: {
+              DEFAULT: "hsl(240 10% 3.9%)",
+              foreground: "hsl(0 0% 98%)",
+            },
+          },
+        },
+      },
+    }
+  </script>
+<style data-purpose="custom-scroll">
+    /* Custom scrollbar for better UI look */
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #09090b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="bg-background text-foreground font-sans antialiased min-h-screen pb-24">
+<!-- BEGIN: Header Section -->
+<header class="flex flex-col items-center pt-8 pb-6 px-4 border-b border-border bg-card/50 sticky top-0 backdrop-blur-md z-10" data-purpose="branding-header">
+<div class="mb-4">
+<img alt="Du Barber House Logo" class="w-24 h-24 rounded-full border-2 border-border shadow-lg" data-purpose="business-logo" src="data:image/jpeg;base64,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"/>
+</div>
+<h1 class="text-xl font-bold tracking-tight">Du Barber House</h1>
+<p class="text-sm text-muted-foreground mt-1">Rua Hamílton Prado, 13</p>
+</header>
+<!-- END: Header Section -->
+<!-- BEGIN: Main Content -->
+<main class="max-w-md mx-auto px-4 py-6" data-purpose="booking-step-1">
+<div class="mb-6">
+<h2 class="text-2xl font-semibold tracking-tight">Escolha seu Serviço</h2>
+<p class="text-sm text-muted-foreground">Selecione uma ou mais opções para agendar</p>
+</div>
+<!-- BEGIN: Service List -->
+<section class="space-y-3" data-purpose="service-selection-list" id="services-container">
+<!-- Corte Adulto -->
+<label class="relative flex items-center justify-between p-4 rounded-xl border border-border bg-card hover:bg-secondary/50 transition-colors cursor-pointer group has-[:checked]:border-accent has-[:checked]:ring-1 has-[:checked]:ring-accent">
+<input class="hidden peer" name="service" type="checkbox" value="corte-adulto"/>
+<div class="flex flex-col gap-1">
+<span class="font-medium">Corte Adulto</span>
+<span class="text-xs text-muted-foreground">45min</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-semibold text-foreground">R$ 50</span>
+<div class="w-5 h-5 rounded-full border border-border flex items-center justify-center peer-checked:bg-accent peer-checked:border-accent">
+<svg class="w-3 h-3 text-white hidden peer-checked:block" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+</div>
+</div>
+</label>
+<!-- Corte Infantil -->
+<label class="relative flex items-center justify-between p-4 rounded-xl border border-border bg-card hover:bg-secondary/50 transition-colors cursor-pointer group has-[:checked]:border-accent has-[:checked]:ring-1 has-[:checked]:ring-accent">
+<input class="hidden peer" name="service" type="checkbox" value="corte-infantil"/>
+<div class="flex flex-col gap-1">
+<span class="font-medium">Corte Infantil</span>
+<span class="text-xs text-muted-foreground">30min</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-semibold text-foreground">R$ 40</span>
+<div class="w-5 h-5 rounded-full border border-border flex items-center justify-center peer-checked:bg-accent peer-checked:border-accent">
+<svg class="w-3 h-3 text-white hidden peer-checked:block" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+</div>
+</div>
+</label>
+<!-- Barba Simples -->
+<label class="relative flex items-center justify-between p-4 rounded-xl border border-border bg-card hover:bg-secondary/50 transition-colors cursor-pointer group has-[:checked]:border-accent has-[:checked]:ring-1 has-[:checked]:ring-accent">
+<input class="hidden peer" name="service" type="checkbox" value="barba-simples"/>
+<div class="flex flex-col gap-1">
+<span class="font-medium">Barba Simples</span>
+<span class="text-xs text-muted-foreground">20min</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-semibold text-foreground">R$ 30</span>
+<div class="w-5 h-5 rounded-full border border-border flex items-center justify-center peer-checked:bg-accent peer-checked:border-accent">
+<svg class="w-3 h-3 text-white hidden peer-checked:block" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+</div>
+</div>
+</label>
+<!-- Barba Completa -->
+<label class="relative flex items-center justify-between p-4 rounded-xl border border-border bg-card hover:bg-secondary/50 transition-colors cursor-pointer group has-[:checked]:border-accent has-[:checked]:ring-1 has-[:checked]:ring-accent">
+<input class="hidden peer" name="service" type="checkbox" value="barba-completa"/>
+<div class="flex flex-col gap-1">
+<span class="font-medium">Barba Completa</span>
+<span class="text-xs text-muted-foreground">40min</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-semibold text-foreground">R$ 45</span>
+<div class="w-5 h-5 rounded-full border border-border flex items-center justify-center peer-checked:bg-accent peer-checked:border-accent">
+<svg class="w-3 h-3 text-white hidden peer-checked:block" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+</div>
+</div>
+</label>
+<!-- Combo Corte + Barba -->
+<label class="relative flex items-center justify-between p-4 rounded-xl border border-border bg-card hover:bg-secondary/50 transition-colors cursor-pointer group has-[:checked]:border-accent has-[:checked]:ring-1 has-[:checked]:ring-accent">
+<input class="hidden peer" name="service" type="checkbox" value="combo-corte-barba"/>
+<div class="flex flex-col gap-1">
+<span class="font-medium text-accent">Combo Corte + Barba</span>
+<span class="text-xs text-muted-foreground">1h 15min</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-semibold text-foreground">R$ 85</span>
+<div class="w-5 h-5 rounded-full border border-border flex items-center justify-center peer-checked:bg-accent peer-checked:border-accent">
+<svg class="w-3 h-3 text-white hidden peer-checked:block" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+</div>
+</div>
+</label>
+</section>
+<!-- END: Service List -->
+</main>
+<!-- END: Main Content -->
+<!-- BEGIN: Footer Action Bar -->
+<footer class="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-lg border-t border-border flex items-center justify-between" data-purpose="action-bar">
+<div class="flex flex-col">
+<span class="text-xs text-muted-foreground">Passo 1 de 4</span>
+<span class="text-sm font-medium" id="total-selected">0 serviço(s) selecionado(s)</span>
+</div>
+<button class="bg-primary hover:bg-red-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg active:scale-95 transition-all" data-purpose="navigation-next" id="next-button">
+      Próximo
+    </button>
+</footer>
+<!-- END: Footer Action Bar -->
+<script data-purpose="interaction-handlers">
+    // Simple logic to count selections for UI feedback
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const totalDisplay = document.getElementById('total-selected');
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        const count = document.querySelectorAll('input[type="checkbox"]:checked').length;
+        totalDisplay.innerText = `${count} serviço(s) selecionado(s)`;
+      });
+    });
+
+    document.getElementById('next-button').addEventListener('click', () => {
+      const selected = document.querySelectorAll('input[type="checkbox"]:checked');
+      if (selected.length === 0) {
+        alert('Por favor, selecione pelo menos um serviço.');
+      } else {
+        // Mock navigation
+        console.log('Navigating to step 2 with selected services:', Array.from(selected).map(s => s.value));
+      }
+    });
+  </script>
+</body></html>
