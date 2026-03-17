@@ -13,6 +13,7 @@ import { supabase } from "@/lib/supabase";
 
 export default function BookingStep4({ data, updateData, onBack, onComplete }: any) {
   const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -55,8 +56,8 @@ export default function BookingStep4({ data, updateData, onBack, onComplete }: a
 
       if (apptError) throw apptError;
 
-      toast.success('Agendamento Confirmado com Sucesso!');
-      onComplete();
+      toast.success('Agendamento Confirmado!');
+      setIsSuccess(true);
     } catch (error: any) {
       console.error('Error saving booking:', error);
       toast.error('Erro ao confirmar agendamento: ' + error.message);
@@ -64,6 +65,29 @@ export default function BookingStep4({ data, updateData, onBack, onComplete }: a
       setLoading(false);
     }
   };
+
+  if (isSuccess) {
+    return (
+      <div className="text-center py-10 animate-in zoom-in duration-500">
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-secondary/20 mb-6">
+          <CheckCircle2 className="w-12 h-12 text-secondary" />
+        </div>
+        <h2 className="text-2xl font-bold mb-2">Tudo Certo, {formData.name.split(' ')[0]}!</h2>
+        <p className="text-muted-foreground mb-8 text-sm">
+           Seu horário foi reservado com sucesso. <br/>
+           Te esperamos no dia <strong>{format(data.date, "dd/MM")}</strong> às <strong>{data.time}</strong>.
+        </p>
+        <div className="space-y-3">
+          <Button className="w-full h-12 font-bold" onClick={() => onComplete()}>
+            Realizar Novo Agendamento
+          </Button>
+          <Button variant="ghost" className="w-full text-muted-foreground" onClick={() => window.location.reload()}>
+            Sair / Finalizar
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   const maskPhone = (value: string) => {
     if (!value) return "";

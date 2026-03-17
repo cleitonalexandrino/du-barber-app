@@ -11,7 +11,7 @@ import ServiceManagement from './_components/admin/ServiceManagement';
 import StaffManagement from './_components/admin/StaffManagement';
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from "sonner";
-import { LayoutDashboard, Calendar, Users, Settings, LogOut, Scissors, UserCheck } from "lucide-react";
+import { LayoutDashboard, Calendar, Users, Settings, LogOut, Scissors, UserCheck, ChevronLeft } from "lucide-react";
 
 export default function App() {
   const [view, setView] = useState('booking'); // 'booking' or 'admin'
@@ -75,7 +75,23 @@ export default function App() {
         case 1: return <BookingStep1 data={bookingData} updateData={setBookingData} onNext={nextStep} />;
         case 2: return <BookingStep2 data={bookingData} updateData={setBookingData} onNext={nextStep} onBack={prevStep} />;
         case 3: return <BookingStep3 data={bookingData} updateData={setBookingData} onNext={nextStep} onBack={prevStep} />;
-        case 4: return <BookingStep4 data={bookingData} updateData={setBookingData} onBack={prevStep} onComplete={() => setBookingStep(1)} />;
+        case 4: return (
+          <BookingStep4 
+            data={bookingData} 
+            updateData={setBookingData} 
+            onBack={prevStep} 
+            onComplete={() => {
+              setBookingStep(1);
+              setBookingData({
+                service: null,
+                barber: null,
+                date: null,
+                time: null,
+                customer: { name: '', phone: '', email: '' }
+              });
+            }} 
+          />
+        );
         default: return <BookingStep1 data={bookingData} updateData={setBookingData} onNext={nextStep} />;
       }
     } else {
@@ -171,40 +187,31 @@ export default function App() {
         {view === 'booking' && (
           <div className="max-w-md mx-auto py-8">
              <div className="text-center mb-8 relative">
-                {/* Global Exit Button for Booking Flow */}
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="absolute right-0 -top-4 gap-1.5 h-8 px-2 text-xs text-muted-foreground hover:text-destructive transition-colors"
-                  onClick={handleLogout}
-                >
-                  Sair do App
-                  <LogOut className="w-3.5 h-3.5" />
-                </Button>
+                 {/* Botão Global de Sair/Reiniciar mais visível */}
+                 <div className="absolute -top-4 right-0 md:-right-4 flex gap-1">
+                   <Button 
+                     variant="outline" 
+                     size="sm" 
+                     className="gap-2 h-9 px-3 text-xs bg-background/50 border-border hover:text-destructive hover:bg-destructive/10 transition-all shadow-sm rounded-full"
+                     onClick={handleLogout}
+                     title="Sair do Aplicativo"
+                   >
+                     <span className="hidden sm:inline">Sair do App</span>
+                     <LogOut className="w-4 h-4" />
+                   </Button>
+                 </div>
 
-                {bookingStep > 1 && (
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="absolute left-0 top-0 gap-1.5 h-8 px-2 text-xs text-muted-foreground"
-                    onClick={prevStep}
-                  >
-                    <LogOut className="w-3.5 h-3.5 rotate-180" />
-                    Voltar
-                  </Button>
-                )}
-                
-                {bookingStep > 1 && (
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="absolute right-0 top-0 gap-1.5 h-8 px-2 text-xs text-muted-foreground hover:text-destructive"
-                    onClick={() => setBookingStep(1)}
-                  >
-                    Reiniciar
-                    <LogOut className="w-3.5 h-3.5" />
-                  </Button>
-                )}
+                 {bookingStep > 1 && (
+                   <Button 
+                     variant="ghost" 
+                     size="sm" 
+                     className="absolute left-0 -top-4 gap-1.5 h-9 px-3 text-xs text-muted-foreground hover:text-foreground"
+                     onClick={prevStep}
+                   >
+                     <ChevronLeft className="w-4 h-4" />
+                     Voltar
+                   </Button>
+                 )}
 
                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4 animate-in fade-in zoom-in duration-500">
                  <Scissors className="w-8 h-8 text-primary" />
