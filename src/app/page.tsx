@@ -42,30 +42,29 @@ export default function App() {
   const prevStep = () => setBookingStep(prev => Math.max(prev - 1, 1));
 
   const handleLogout = () => {
-    // 1. Reset states
+    // 1. Reset all local states
     setView('booking');
     setBookingStep(1);
     setShowAdminSwitcher(false);
-    setBookingData({
-      service: null,
-      barber: null,
-      date: null,
-      time: null,
-      customer: { name: '', phone: '', email: '' }
-    });
-
-    // 2. Clear URL params and Refresh for security (Anti-Cache)
+    
+    // 2. Clear URL and Refresh (Anti-Cache)
     const url = new URL(window.location.href);
     url.searchParams.delete('admin');
     window.location.href = url.origin + url.pathname;
   };
 
   const handleAdminSwitch = () => {
-    const pass = prompt("Digite a senha do administrador:");
-    if (pass === "admin123") { // Example password, you can change this
-      setView('admin');
+    const email = prompt("Digite seu e-mail de administrador:");
+    if (email === "cleitonalexandrino@gmail.com") {
+      const pass = prompt("Digite sua senha:");
+      if (pass === "admin123") {
+        setView('admin');
+        toast.success("Bem-vindo, Cleiton Silva!");
+      } else {
+        toast.error("Senha incorreta.");
+      }
     } else {
-      alert("Acesso negado.");
+      toast.error("Usuário não autorizado.");
     }
   };
 
