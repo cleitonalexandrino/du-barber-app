@@ -9,6 +9,7 @@ import Dashboard from './_components/admin/Dashboard';
 import ClientManagement from './_components/admin/ClientManagement';
 import ServiceManagement from './_components/admin/ServiceManagement';
 import StaffManagement from './_components/admin/StaffManagement';
+import CustomerAuth from './_components/auth/CustomerAuth';
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from "sonner";
 import { LayoutDashboard, Calendar, Users, Settings, LogOut, Scissors, UserCheck, ChevronLeft } from "lucide-react";
@@ -115,6 +116,10 @@ export default function App() {
 
   const content = () => {
     if (view === 'booking') {
+      if (!loggedCustomer) {
+        return <CustomerAuth onLoginSuccess={(customer) => setLoggedCustomer(customer)} />;
+      }
+
       switch (bookingStep) {
         case 1: return <BookingStep1 data={bookingData} updateData={setBookingData} onNext={nextStep} />;
         case 2: return <BookingStep2 data={bookingData} updateData={setBookingData} onNext={nextStep} onBack={prevStep} />;
@@ -234,68 +239,65 @@ export default function App() {
              <div className="text-center mb-8 relative">
                  {/* Botão Global de Sair/Reiniciar mais visível */}
                  <div className="absolute -top-4 right-0 md:-right-4 flex gap-1">
-                   <Button 
-                     variant="outline" 
-                     size="sm" 
-                     className="gap-2 h-9 px-3 text-xs bg-background/50 border-border hover:text-destructive hover:bg-destructive/10 transition-all shadow-sm rounded-full"
-                     onClick={handleLogout}
-                     title="Sair do Aplicativo"
-                   >
-                     <span className="hidden sm:inline">Sair do App</span>
-                     <LogOut className="w-4 h-4" />
-                   </Button>
+                   {loggedCustomer && (
+                     <Button 
+                       variant="outline" 
+                       size="sm" 
+                       className="gap-2 h-9 px-3 text-xs bg-background/50 border-border hover:text-destructive hover:bg-destructive/10 transition-all shadow-sm rounded-full"
+                       onClick={handleLogout}
+                       title="Sair do Aplicativo"
+                     >
+                       <span className="hidden sm:inline">Sair do App</span>
+                       <LogOut className="w-4 h-4" />
+                     </Button>
+                   )}
                  </div>
 
                  <div className="flex flex-col items-center mt-2 mb-2">
-                    {loggedCustomer ? (
-                      <div className="flex items-center gap-2 bg-secondary/10 px-3 py-1.5 rounded-full border border-secondary/20 transition-all hover:bg-secondary/20">
-                         <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-[10px] font-black text-white">
+                    {loggedCustomer && (
+                      <div className="flex items-center gap-2 bg-secondary/10 px-3 py-1.5 rounded-full border border-secondary/20 transition-all hover:bg-secondary/20 scale-95 opacity-80 hover:opacity-100 relative">
+                         <div className="w-5 h-5 rounded-full bg-secondary flex items-center justify-center text-[9px] font-black text-white">
                            {loggedCustomer.name.charAt(0)}
                          </div>
-                         <span className="text-xs font-bold">{loggedCustomer.name}</span>
+                         <span className="text-[11px] font-bold">{loggedCustomer.name}</span>
                          <button onClick={() => setLoggedCustomer(null)} className="text-[10px] text-muted-foreground hover:text-destructive underline ml-1">Sair</button>
                       </div>
-                    ) : (
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="text-[10px] uppercase tracking-widest font-black text-primary hover:bg-primary/5 h-7"
-                        onClick={handleCustomerLogin}
-                      >
-                        Entrar em minha conta
-                      </Button>
                     )}
                  </div>
 
-                 {bookingStep > 1 && (
-                   <Button 
-                     variant="ghost" 
-                     size="sm" 
-                     className="absolute left-0 -top-4 gap-1.5 h-9 px-3 text-xs text-muted-foreground hover:text-foreground"
-                     onClick={prevStep}
-                   >
-                     <ChevronLeft className="w-4 h-4" />
-                     Voltar
-                   </Button>
-                 )}
+                 {loggedCustomer && (
+                   <div className="animate-in fade-in duration-500">
+                     {bookingStep > 1 && (
+                       <Button 
+                         variant="ghost" 
+                         size="sm" 
+                         className="absolute left-0 -top-4 gap-1.5 h-9 px-3 text-xs text-muted-foreground hover:text-foreground"
+                         onClick={prevStep}
+                       >
+                         <ChevronLeft className="w-4 h-4" />
+                         Voltar
+                       </Button>
+                     )}
 
-               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4 animate-in fade-in zoom-in duration-500">
-                 <Scissors className="w-8 h-8 text-primary" />
-               </div>
-               <h1 className="text-2xl font-bold tracking-tight">Du Barber House</h1>
-               <h2 className="text-muted-foreground text-sm">Rua Hamílton Prado, 13</h2>
-               
-               <div className="mt-8 flex justify-center gap-2">
-                 {[1, 2, 3, 4].map(step => (
-                   <div 
-                    key={step} 
-                    className={`h-1.5 w-8 rounded-full transition-all duration-300 ${step === bookingStep ? 'bg-primary w-12' : step < bookingStep ? 'bg-secondary' : 'bg-muted'}`} 
-                   />
-                 ))}
-               </div>
-             </div>
-             {content()}
-          </div>
+                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+                       <Scissors className="w-8 h-8 text-primary" />
+                     </div>
+                     <h1 className="text-2xl font-bold tracking-tight">Du Barber House</h1>
+                     <h2 className="text-muted-foreground text-sm">Rua Hamílton Prado, 13</h2>
+                     
+                     <div className="mt-8 flex justify-center gap-2">
+                       {[1, 2, 3, 4].map(step => (
+                         <div 
+                          key={step} 
+                          className={`h-1.5 w-8 rounded-full transition-all duration-300 ${step === bookingStep ? 'bg-primary w-12' : step < bookingStep ? 'bg-secondary' : 'bg-muted'}`} 
+                         />
+                       ))}
+                     </div>
+                   </div>
+                 )}
+              </div>
+              {content()}
+           </div>
         )}
       </main>
       <Toaster position="top-center" theme="dark" closeButton />
