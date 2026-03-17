@@ -43,15 +43,38 @@
 }
 
 :root {
+  --background: #fdfdfd;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --primary: #EF4444; 
+  --primary-foreground: #ffffff;
+  --secondary: #3B82F6; 
+  --secondary-foreground: #ffffff;
+  --muted: #f3f4f6;
+  --muted-foreground: #6b7280;
+  --accent: #f3f4f6;
+  --accent-foreground: #0a0a0a;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #3B82F6;
+  --radius: 0.75rem;
+}
+
+.dark {
   --background: #0a0a0a;
   --foreground: #ffffff;
   --card: #151515;
   --card-foreground: #ffffff;
   --popover: #151515;
   --popover-foreground: #ffffff;
-  --primary: #EF4444; /* Barber Pole Red */
+  --primary: #EF4444;
   --primary-foreground: #ffffff;
-  --secondary: #3B82F6; /* Barber Pole Blue */
+  --secondary: #3B82F6;
   --secondary-foreground: #ffffff;
   --muted: #262626;
   --muted-foreground: #a3a3a3;
@@ -62,12 +85,6 @@
   --border: #262626;
   --input: #262626;
   --ring: #3B82F6;
-  --chart-1: #EF4444;
-  --chart-2: #3B82F6;
-  --chart-3: #ffffff;
-  --chart-4: #a3a3a3;
-  --chart-5: #525252;
-  --radius: 0.75rem;
 }
 
 body {

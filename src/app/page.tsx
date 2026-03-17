@@ -12,8 +12,9 @@ import StaffManagement from './_components/admin/StaffManagement';
 import CustomerAuth from './_components/auth/CustomerAuth';
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from "sonner";
-import { LayoutDashboard, Calendar, Users, Settings, LogOut, Scissors, UserCheck, ChevronLeft } from "lucide-react";
+import { LayoutDashboard, Calendar, Users, Settings, LogOut, Scissors, UserCheck, ChevronLeft, Moon, Sun } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function App() {
   const [view, setView] = useState('booking'); // 'booking' or 'admin'
@@ -157,7 +158,32 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
-      {/* Navigation Switcher (Hidden from Customers) */}
+      {/* Botões de Utilidade Fixos no Topo */}
+      <div className="fixed top-4 right-4 z-[100] flex gap-2">
+        <ThemeToggle />
+        {showAdminSwitcher && (
+          <div className="flex gap-2">
+            <Button 
+              variant={view === 'booking' ? 'default' : 'outline'} 
+              size="sm"
+              className="rounded-full shadow-md bg-background/50 border-border"
+              onClick={() => setView('booking')}
+            >
+              Cliente
+            </Button>
+            <Button 
+              variant={view === 'admin' ? 'default' : 'outline'} 
+              size="sm"
+              className="rounded-full shadow-md bg-background/50 border-border"
+              onClick={handleAdminSwitch}
+            >
+              Admin
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {/* Navigation Switcher (Hidden from Customers) - Mantido para compatibilidade se necessário, mas os botões agora estão no topo */}
       {showAdminSwitcher && (
         <div className="fixed bottom-4 right-4 z-50 flex gap-2 opacity-30 hover:opacity-100 transition-opacity">
           <Button 
