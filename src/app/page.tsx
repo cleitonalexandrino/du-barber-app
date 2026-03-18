@@ -280,15 +280,7 @@ export default function App() {
                  </div>
 
                  <div className="flex flex-col items-center mt-2 mb-2">
-                    {loggedCustomer && (
-                      <div className="flex items-center gap-2 bg-secondary/10 px-3 py-1.5 rounded-full border border-secondary/20 transition-all hover:bg-secondary/20 scale-95 opacity-80 hover:opacity-100 relative">
-                         <div className="w-5 h-5 rounded-full bg-secondary flex items-center justify-center text-[9px] font-black text-white">
-                           {loggedCustomer.name.charAt(0)}
-                         </div>
-                         <span className="text-[11px] font-bold">{loggedCustomer.name}</span>
-                         <button onClick={() => setLoggedCustomer(null)} className="text-[10px] text-muted-foreground hover:text-destructive underline ml-1">Sair</button>
-                      </div>
-                    )}
+                    {/* Perfil central removido para evitar redundância com o botão lateral */}
                  </div>
 
                  {loggedCustomer && (
