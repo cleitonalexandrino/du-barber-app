@@ -35,13 +35,27 @@ export default function App() {
     }
   });
 
-  // Check for admin access via URL parameter
+  // Check for admin access via URL parameter OR logged status
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('admin') === 'true') {
       setShowAdminSwitcher(true);
+      return;
     }
-  }, []);
+
+    if (loggedCustomer) {
+      const checkAdmin = async () => {
+        const { data } = await supabase
+          .from('admins')
+          .select('id')
+          .eq('email', loggedCustomer.email)
+          .single();
+        
+        if (data) setShowAdminSwitcher(true);
+      };
+      checkAdmin();
+    }
+  }, [loggedCustomer]);
 
   const nextStep = () => setBookingStep(prev => Math.min(prev + 1, 4));
   const prevStep = () => setBookingStep(prev => Math.max(prev - 1, 1));
@@ -59,59 +73,41 @@ export default function App() {
     window.location.href = url.origin + url.pathname;
   };
 
-  const handleCustomerLogin = async () => {
-    const phone = prompt("Digite seu Telefone:");
-    if (!phone) return;
-    
-    const pass = prompt("Digite sua senha (padrão: cliente123):");
+  const handleAdminSwitch = async () => {
+    // 1. Verificar se o usuário atual logado como cliente tem status de admin
+    if (loggedCustomer) {
+      const { data, error } = await supabase
+        .from('admins')
+        .select('*')
+        .eq('email', loggedCustomer.email)
+        .single();
+      
+      if (data) {
+        setView('admin');
+        toast.success(`Modo Administrador Ativado!`);
+        return;
+      }
+    }
+
+    // 2. Fallback para login manual de admin
+    const email = prompt("Digite seu e-mail de administrador:");
+    if (!email) return;
+
+    const pass = prompt("Digite sua senha:");
     if (!pass) return;
 
-    const { data: customer, error } = await supabase
-      .from('clients')
+    const { data: admin, error } = await supabase
+      .from('admins')
       .select('*')
-      .eq('phone', phone)
+      .eq('email', email)
       .eq('password', pass)
       .single();
 
-    if (error || !customer) {
-      toast.error("Cliente não encontrado ou senha incorreta.");
-      
-      const wantRegister = confirm("Deseja criar uma nova conta com esses dados?");
-      if (wantRegister) {
-        const name = prompt("Digite seu nome completo:");
-        if (name) {
-          const { data: newCustomer, error: regError } = await supabase
-            .from('clients')
-            .insert({ name, phone, password: pass })
-            .select()
-            .single();
-          
-          if (regError) {
-             toast.error("Erro ao cadastrar: " + regError.message);
-          } else {
-             setLoggedCustomer(newCustomer);
-             toast.success("Conta criada! Bem-vindo, " + name);
-          }
-        }
-      }
+    if (admin) {
+      setView('admin');
+      toast.success(`Bem-vindo, ${admin.name}!`);
     } else {
-      setLoggedCustomer(customer);
-      toast.success("Bem-vindo de volta, " + customer.name);
-    }
-  };
-
-  const handleAdminSwitch = () => {
-    const email = prompt("Digite seu e-mail de administrador:");
-    if (email === "cleitonalexandrino@gmail.com") {
-      const pass = prompt("Digite sua senha:");
-      if (pass === "admin123") {
-        setView('admin');
-        toast.success("Bem-vindo, Cleiton Silva!");
-      } else {
-        toast.error("Senha incorreta.");
-      }
-    } else {
-      toast.error("Usuário não autorizado.");
+      toast.error("Acesso administrativo negado.");
     }
   };
 
@@ -157,24 +153,24 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+    <div className="min-h-screen bg-background text-foreground transition-all duration-500 font-sans">
       {/* Botões de Utilidade Fixos no Topo */}
-      <div className="fixed top-4 right-4 z-[100] flex gap-2">
+      <div className="fixed top-6 right-6 z-[100] flex gap-3">
         <ThemeToggle />
         {showAdminSwitcher && (
-          <div className="flex gap-2">
+          <div className="flex bg-white/10 backdrop-blur-md p-1 rounded-full border border-white/20 shadow-xl">
             <Button 
-              variant={view === 'booking' ? 'default' : 'outline'} 
+              variant={view === 'booking' ? 'default' : 'ghost'} 
               size="sm"
-              className="rounded-full shadow-md bg-background/50 border-border"
+              className={`rounded-full h-8 px-4 text-[10px] font-bold uppercase tracking-wider transition-all ${view === 'booking' ? 'shadow-lg bg-primary text-white' : 'hover:bg-white/10 text-muted-foreground'}`}
               onClick={() => setView('booking')}
             >
               Cliente
             </Button>
             <Button 
-              variant={view === 'admin' ? 'default' : 'outline'} 
+              variant={view === 'admin' ? 'default' : 'ghost'} 
               size="sm"
-              className="rounded-full shadow-md bg-background/50 border-border"
+              className={`rounded-full h-8 px-4 text-[10px] font-bold uppercase tracking-wider transition-all ${view === 'admin' ? 'shadow-lg bg-primary text-white' : 'hover:bg-white/10 text-muted-foreground'}`}
               onClick={handleAdminSwitch}
             >
               Admin
@@ -183,78 +179,74 @@ export default function App() {
         )}
       </div>
 
-      {/* Navigation Switcher (Hidden from Customers) - Mantido para compatibilidade se necessário, mas os botões agora estão no topo */}
-      {showAdminSwitcher && (
-        <div className="fixed bottom-4 right-4 z-50 flex gap-2 opacity-30 hover:opacity-100 transition-opacity">
-          <Button 
-            variant={view === 'booking' ? 'default' : 'secondary'} 
-            size="sm"
-            onClick={() => setView('booking')}
-          >
-            Modo Cliente
-          </Button>
-          <Button 
-            variant={view === 'admin' ? 'default' : 'secondary'} 
-            size="sm"
-            onClick={handleAdminSwitch}
-          >
-            Modo Admin
-          </Button>
-        </div>
-      )}
-
       <main className="max-w-7xl mx-auto px-4 py-8">
         {view === 'admin' && (
-          <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-8">
-            <aside className="space-y-2">
-              <div className="mb-8 flex items-center gap-2 px-2">
-                <Scissors className="w-6 h-6 text-primary" />
-                <h1 className="text-xl font-bold tracking-tight text-white">DU BARBER</h1>
+          <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-12">
+            <aside className="space-y-8 bg-primary text-primary-foreground p-8 rounded-[2rem] shadow-2xl border border-white/10 h-fit sticky top-8">
+              <div className="flex flex-col items-center gap-4 py-6 border-b border-white/10">
+                <div className="relative group">
+                  <div className="absolute -inset-2 bg-gradient-to-tr from-accent to-accent/20 rounded-full blur-lg opacity-20 group-hover:opacity-40 transition-opacity" />
+                  <div className="relative w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-inner overflow-hidden">
+                    <Scissors className="w-10 h-10 text-primary rotate-12 group-hover:rotate-0 transition-transform duration-500" />
+                  </div>
+                </div>
+                <h1 className="text-3xl font-serif font-bold tracking-tighter mt-2">DU BARBER</h1>
               </div>
-              <Button 
-                variant={adminView === 'dashboard' ? 'default' : 'ghost'} 
-                className="w-full justify-start gap-3 h-11 px-4"
-                onClick={() => setAdminView('dashboard')}
-              >
-                <LayoutDashboard className="w-4 h-4" />
-                Dashboard
-              </Button>
-              <Button 
-                variant={adminView === 'staff' ? 'default' : 'ghost'} 
-                className="w-full justify-start gap-3 h-11 px-4 text-white"
-                onClick={() => setAdminView('staff')}
-              >
-                <UserCheck className="w-4 h-4" />
-                Equipe
-              </Button>
-              <Button 
-                variant={adminView === 'clients' ? 'default' : 'ghost'} 
-                className="w-full justify-start gap-3 h-11 px-4 text-white"
-                onClick={() => setAdminView('clients')}
-              >
-                <Users className="w-4 h-4" />
-                Clientes
-              </Button>
-              <Button 
-                variant={adminView === 'services' ? 'default' : 'ghost'} 
-                className="w-full justify-start gap-3 h-11 px-4 text-white"
-                onClick={() => setAdminView('services')}
-              >
-                <Settings className="w-4 h-4" />
-                Serviços
-              </Button>
-              <div className="pt-8 mt-8 border-t border-border">
+
+              <div className="space-y-8">
+                <div className="space-y-2">
+                  <p className="px-5 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-4">Operacional</p>
+                  <Button 
+                    variant={adminView === 'dashboard' ? 'secondary' : 'ghost'} 
+                    className={`w-full justify-start gap-4 h-14 px-6 rounded-2xl transition-all ${adminView === 'dashboard' ? 'shadow-xl scale-[1.02]' : 'hover:bg-white/10'}`}
+                    onClick={() => setAdminView('dashboard')}
+                  >
+                    <LayoutDashboard className="w-5 h-5 opacity-70" />
+                    <span className="font-bold tracking-tight">Dashboard</span>
+                  </Button>
+                  <Button 
+                    variant={adminView === 'services' ? 'secondary' : 'ghost'} 
+                    className={`w-full justify-start gap-4 h-14 px-6 rounded-2xl transition-all ${adminView === 'services' ? 'shadow-xl scale-[1.02]' : 'hover:bg-white/10'}`}
+                    onClick={() => setAdminView('services')}
+                  >
+                    <Settings className="w-5 h-5 opacity-70" />
+                    <span className="font-bold tracking-tight">Serviços</span>
+                  </Button>
+                </div>
+
+                <div className="space-y-2">
+                  <p className="px-5 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-4">Pessoas</p>
+                  <Button 
+                    variant={adminView === 'staff' ? 'secondary' : 'ghost'} 
+                    className={`w-full justify-start gap-4 h-14 px-6 rounded-2xl transition-all ${adminView === 'staff' ? 'shadow-xl scale-[1.02]' : 'hover:bg-white/10'}`}
+                    onClick={() => setAdminView('staff')}
+                  >
+                    <UserCheck className="w-5 h-5 opacity-70" />
+                    <span className="font-bold tracking-tight">Equipe / Staff</span>
+                  </Button>
+                  <Button 
+                    variant={adminView === 'clients' ? 'secondary' : 'ghost'} 
+                    className={`w-full justify-start gap-4 h-14 px-6 rounded-2xl transition-all ${adminView === 'clients' ? 'shadow-xl scale-[1.02]' : 'hover:bg-white/10'}`}
+                    onClick={() => setAdminView('clients')}
+                  >
+                    <Users className="w-5 h-5 opacity-70" />
+                    <span className="font-bold tracking-tight">Clientes</span>
+                  </Button>
+                </div>
+              </div>
+
+              <div className="pt-8 border-t border-white/10">
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start gap-3 h-11 px-4 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                  className="w-full justify-start gap-4 h-14 px-6 text-white/60 hover:text-accent hover:bg-accent/10 transition-all rounded-2xl"
                   onClick={handleLogout}
                 >
-                  <LogOut className="w-4 h-4" />
-                  Sair do Painel
+                  <LogOut className="w-5 h-5" />
+                  <span className="font-bold tracking-tight">Sair do Painel</span>
                 </Button>
               </div>
             </aside>
-            <div className="space-y-6">
+            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out fill-mode-both">
               {content()}
             </div>
           </div>
@@ -262,63 +254,67 @@ export default function App() {
 
         {view === 'booking' && (
           <div className="max-w-md mx-auto py-8">
-             <div className="text-center mb-8 relative">
-                 {/* Botão Global de Sair/Reiniciar mais visível */}
-                 <div className="absolute -top-4 right-0 md:-right-4 flex gap-1">
-                   {loggedCustomer && (
-                     <Button 
-                       variant="outline" 
-                       size="sm" 
-                       className="gap-2 h-9 px-3 text-xs bg-background/50 border-border hover:text-destructive hover:bg-destructive/10 transition-all shadow-sm rounded-full"
-                       onClick={handleLogout}
-                       title="Sair do Aplicativo"
-                     >
-                       <span className="hidden sm:inline">Sair do App</span>
-                       <LogOut className="w-4 h-4" />
-                     </Button>
-                   )}
-                 </div>
+             <div className="text-center mb-16 relative animate-in fade-in slide-in-from-top-6 duration-1000 ease-out">
+                  <div className="absolute -top-4 right-0 md:-right-4 flex gap-1">
+                    {loggedCustomer && (
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="gap-2 h-10 px-5 text-[11px] font-bold uppercase tracking-widest bg-white/90 border-border hover:text-accent hover:border-accent/40 transition-all shadow-xl rounded-full backdrop-blur-md"
+                        onClick={handleLogout}
+                      >
+                        <span>Sair</span>
+                        <LogOut className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
 
-                 <div className="flex flex-col items-center mt-2 mb-2">
-                    {/* Perfil central removido para evitar redundância com o botão lateral */}
-                 </div>
+                  {loggedCustomer && (
+                    <div className="flex flex-col items-center">
+                      {bookingStep > 1 && (
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="absolute left-0 -top-4 gap-2 h-10 px-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-all rounded-full"
+                          onClick={prevStep}
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                          <span>VOLTAR</span>
+                        </Button>
+                      )}
 
-                 {loggedCustomer && (
-                   <div className="animate-in fade-in duration-500">
-                     {bookingStep > 1 && (
-                       <Button 
-                         variant="ghost" 
-                         size="sm" 
-                         className="absolute left-0 -top-4 gap-1.5 h-9 px-3 text-xs text-muted-foreground hover:text-foreground"
-                         onClick={prevStep}
-                       >
-                         <ChevronLeft className="w-4 h-4" />
-                         Voltar
-                       </Button>
-                     )}
-
-                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-                       <Scissors className="w-8 h-8 text-primary" />
-                     </div>
-                     <h1 className="text-2xl font-bold tracking-tight">Du Barber House</h1>
-                     <h2 className="text-muted-foreground text-sm">Rua Hamílton Prado, 13</h2>
-                     
-                     <div className="mt-8 flex justify-center gap-2">
-                       {[1, 2, 3, 4].map(step => (
-                         <div 
-                          key={step} 
-                          className={`h-1.5 w-8 rounded-full transition-all duration-300 ${step === bookingStep ? 'bg-primary w-12' : step < bookingStep ? 'bg-secondary' : 'bg-muted'}`} 
-                         />
-                       ))}
-                     </div>
-                   </div>
-                 )}
+                      <div className="relative mb-8 group">
+                        <div className="absolute -inset-6 bg-primary/5 rounded-full blur-2xl group-hover:bg-accent/5 transition-colors duration-1000" />
+                        <div className="relative w-32 h-32 rounded-full bg-white border-8 border-primary/5 flex items-center justify-center shadow-[0_20px_50px_-12px_rgba(0,51,102,0.25)] ring-1 ring-border">
+                          <Scissors className="w-14 h-14 text-primary rotate-12 group-hover:rotate-0 transition-transform duration-700" />
+                        </div>
+                      </div>
+                      
+                      <h1 className="text-5xl font-serif font-bold tracking-tighter text-primary mb-2">Du Barber</h1>
+                      <div className="flex items-center gap-4 mb-10">
+                        <div className="h-[2px] w-12 bg-accent/40" />
+                        <h2 className="text-muted-foreground text-[10px] font-bold uppercase tracking-[0.4em]">Tradição desde sempre</h2>
+                        <div className="h-[2px] w-12 bg-accent/40" />
+                      </div>
+                      
+                      <div className="mt-4 flex justify-center gap-4">
+                        {[1, 2, 3, 4].map(step => (
+                          <div 
+                           key={step} 
+                           className={`h-2 transition-all duration-700 rounded-full ${step === bookingStep ? 'w-16 bg-accent shadow-lg shadow-accent/40' : step < bookingStep ? 'w-8 bg-primary/40' : 'w-8 bg-muted'}`} 
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
               </div>
-              {content()}
+              <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-300 fill-mode-both">
+                {content()}
+              </div>
            </div>
         )}
       </main>
-      <Toaster position="top-center" theme="dark" closeButton />
+      <Toaster position="top-center" richColors />
     </div>
   );
 }
