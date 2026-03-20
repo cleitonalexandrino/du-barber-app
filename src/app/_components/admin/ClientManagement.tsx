@@ -220,87 +220,154 @@ export default function ClientManagement() {
             <p className="font-serif text-muted-foreground text-lg">Localizando clientes...</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader className="bg-slate-50 border-b border-border">
-                <TableRow className="hover:bg-transparent border-0">
-                  <TableHead className="font-bold text-primary uppercase tracking-widest text-[10px] py-6 px-8">Cliente</TableHead>
-                  <TableHead className="font-bold text-primary uppercase tracking-widest text-[10px] py-6">Contato</TableHead>
-                  <TableHead className="hidden md:table-cell font-bold text-primary uppercase tracking-widest text-[10px] py-6 text-center">Visitas</TableHead>
-                  <TableHead className="hidden md:table-cell font-bold text-primary uppercase tracking-widest text-[10px] py-6">Faturamento Acumulado</TableHead>
-                  <TableHead className="w-[120px] text-right py-6 px-8 font-bold text-primary uppercase tracking-widest text-[10px]">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredClients.length > 0 ? filteredClients.map((client) => (
-                  <TableRow key={client.id} className="hover:bg-slate-50/80 border-border transition-all duration-300 group">
-                    <TableCell className="py-6 px-8">
-                       <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center border border-border shadow-inner group-hover:bg-primary/5 transition-colors">
-                             <User className="w-6 h-6 text-primary/40 group-hover:text-accent transition-colors" />
-                          </div>
-                          <div>
-                             <p className="font-serif font-bold text-xl text-primary leading-tight group-hover:text-accent transition-colors">{client.name}</p>
-                             <div className="flex items-center gap-2 mt-0.5">
-                                <Mail className="w-3 h-3 text-muted-foreground" />
-                                <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">{client.email || 'SEM E-MAIL'}</p>
-                             </div>
-                          </div>
-                       </div>
-                    </TableCell>
-                    <TableCell className="py-6">
-                       <div className="flex items-center gap-2 text-sm font-bold text-primary/70 bg-slate-50 px-3 py-1.5 rounded-full border border-border w-fit">
-                          <Phone className="w-3.5 h-3.5 text-accent" />
-                          {client.phone}
-                       </div>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell text-center py-6">
-                       <span className="text-lg font-serif font-bold text-primary tabular-nums group-hover:scale-125 transition-transform inline-block">{client.visits || 0}</span>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell py-6">
-                       <div className="flex items-center gap-1.5 font-bold text-primary tracking-tighter text-lg">
-                          <span className="text-xs font-bold text-muted-foreground">R$</span>
-                          {new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(client.total_spent || 0)}
-                       </div>
-                    </TableCell>
-                    <TableCell className="text-right px-8 py-6">
-                      <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0">
-                        <Button 
-                           variant="ghost" 
-                           size="icon" 
-                           className="h-10 w-10 bg-white border border-border rounded-xl text-muted-foreground hover:text-primary hover:border-primary hover:shadow-lg transition-all"
-                           onClick={() => {
-                              setEditingClient(client);
-                              setEditClientData({
-                                 name: client.name,
-                                 phone: client.phone,
-                                 email: client.email || '',
-                                 password: client.password || 'cliente123'
-                              });
-                              setIsEditModalOpen(true);
-                           }}
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button 
-                           variant="ghost" 
-                           size="icon" 
-                           className="h-10 w-10 bg-white border border-border rounded-xl text-muted-foreground hover:text-destructive hover:border-destructive hover:shadow-lg transition-all"
-                           onClick={() => { setClientToDelete(client); setIsDeleteModalOpen(true); }}
-                        >
-                          <Trash className="h-4 w-4" />
-                        </Button>
+          <>
+            {/* Visualização em Tabela (Desktop) */}
+            <div className="hidden md:block overflow-x-auto">
+              <Table>
+                <TableHeader className="bg-slate-50 border-b border-border">
+                  <TableRow className="hover:bg-transparent border-0">
+                    <TableHead className="font-bold text-primary uppercase tracking-widest text-[10px] py-6 px-8">Cliente</TableHead>
+                    <TableHead className="font-bold text-primary uppercase tracking-widest text-[10px] py-6">Contato</TableHead>
+                    <TableHead className="font-bold text-primary uppercase tracking-widest text-[10px] py-6 text-center">Visitas</TableHead>
+                    <TableHead className="font-bold text-primary uppercase tracking-widest text-[10px] py-6">Faturamento Acumulado</TableHead>
+                    <TableHead className="w-[120px] text-right py-6 px-8 font-bold text-primary uppercase tracking-widest text-[10px]">Ações</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredClients.length > 0 ? filteredClients.map((client) => (
+                    <TableRow key={client.id} className="hover:bg-slate-50/80 border-border transition-all duration-300 group">
+                      <TableCell className="py-6 px-8">
+                         <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center border border-border shadow-inner group-hover:bg-primary/5 transition-colors">
+                               <User className="w-6 h-6 text-primary/40 group-hover:text-accent transition-colors" />
+                            </div>
+                            <div>
+                               <p className="font-serif font-bold text-xl text-primary leading-tight group-hover:text-accent transition-colors">{client.name}</p>
+                               <div className="flex items-center gap-2 mt-0.5">
+                                  <Mail className="w-3 h-3 text-muted-foreground" />
+                                  <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">{client.email || 'SEM E-MAIL'}</p>
+                               </div>
+                            </div>
+                         </div>
+                      </TableCell>
+                      <TableCell className="py-6">
+                         <div className="flex items-center gap-2 text-sm font-bold text-primary/70 bg-slate-50 px-3 py-1.5 rounded-full border border-border w-fit">
+                            <Phone className="w-3.5 h-3.5 text-accent" />
+                            {client.phone}
+                         </div>
+                      </TableCell>
+                      <TableCell className="text-center py-6">
+                         <span className="text-lg font-serif font-bold text-primary tabular-nums group-hover:scale-125 transition-transform inline-block">{client.visits || 0}</span>
+                      </TableCell>
+                      <TableCell className="py-6">
+                         <div className="flex items-center gap-1.5 font-bold text-primary tracking-tighter text-lg">
+                            <span className="text-xs font-bold text-muted-foreground">R$</span>
+                            {new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(client.total_spent || 0)}
+                         </div>
+                      </TableCell>
+                      <TableCell className="text-right px-8 py-6">
+                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0">
+                          <Button 
+                             variant="ghost" 
+                             size="icon" 
+                             className="h-10 w-10 bg-white border border-border rounded-xl text-muted-foreground hover:text-primary hover:border-primary hover:shadow-lg transition-all"
+                             onClick={() => {
+                                setEditingClient(client);
+                                setEditClientData({
+                                   name: client.name,
+                                   phone: client.phone,
+                                   email: client.email || '',
+                                   password: client.password || 'cliente123'
+                                });
+                                setIsEditModalOpen(true);
+                             }}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                             variant="ghost" 
+                             size="icon" 
+                             className="h-10 w-10 bg-white border border-border rounded-xl text-muted-foreground hover:text-destructive hover:border-destructive hover:shadow-lg transition-all"
+                             onClick={() => { setClientToDelete(client); setIsDeleteModalOpen(true); }}
+                          >
+                            <Trash className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )) : (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center py-32 text-muted-foreground font-serif text-lg">Ainda não encontramos clientes nos registros.</TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Visualização em Cards (Mobile) */}
+            <div className="md:hidden divide-y divide-border">
+              {filteredClients.length > 0 ? filteredClients.map((client) => (
+                <div key={client.id} className="p-6 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center border border-border">
+                        <User className="w-5 h-5 text-primary/40" />
                       </div>
-                    </TableCell>
-                  </TableRow>
-                )) : (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center py-32 text-muted-foreground font-serif text-lg">Ainda não encontramos clientes nos registros.</TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                      <div>
+                        <p className="font-serif font-bold text-lg text-primary leading-tight">{client.name}</p>
+                        <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest">{client.email || 'SEM E-MAIL'}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-9 w-9 bg-slate-50 border border-border rounded-xl text-primary"
+                        onClick={() => {
+                          setEditingClient(client);
+                          setEditClientData({
+                             name: client.name,
+                             phone: client.phone,
+                             email: client.email || '',
+                             password: client.password || 'cliente123'
+                          });
+                          setIsEditModalOpen(true);
+                        }}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-9 w-9 bg-slate-50 border border-border rounded-xl text-destructive"
+                        onClick={() => { setClientToDelete(client); setIsDeleteModalOpen(true); }}
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-slate-50 p-3 rounded-2xl border border-border/50">
+                      <p className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Contato</p>
+                      <p className="text-xs font-bold text-primary flex items-center gap-1">
+                        <Phone className="w-3 h-3 text-accent" />
+                        {client.phone}
+                      </p>
+                    </div>
+                    <div className="bg-slate-50 p-3 rounded-2xl border border-border/50">
+                      <p className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Total Gasto</p>
+                      <p className="text-xs font-bold text-primary">
+                        <span className="text-[9px] text-muted-foreground mr-1">R$</span>
+                        {new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(client.total_spent || 0)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )) : (
+                <div className="p-20 text-center text-muted-foreground font-serif">Nenhum cliente encontrado.</div>
+              )}
+            </div>
+          </>
         )}
       </div>
 

@@ -76,38 +76,38 @@ export default function BookingStep4({ data, updateData, onBack, onComplete, log
 
   if (isSuccess) {
     return (
-      <div className="text-center py-10 animate-in zoom-in-95 duration-1000 ease-out fill-mode-both">
-        <div className="relative mb-12 flex justify-center">
-          <div className="absolute inset-0 bg-accent/20 rounded-full blur-3xl animate-pulse" />
-          <div className="relative w-32 h-32 rounded-full bg-white border-8 border-slate-50 flex items-center justify-center shadow-2xl ring-1 ring-accent/20">
-            <CheckCircle2 className="w-16 h-16 text-accent" />
+      <div className="text-center py-6 animate-in zoom-in-95 duration-1000 ease-out fill-mode-both">
+        <div className="relative mb-8 flex justify-center">
+          <div className="absolute inset-0 bg-accent/20 rounded-full blur-2xl animate-pulse" />
+          <div className="relative w-20 h-20 rounded-full bg-white border-4 border-slate-50 flex items-center justify-center shadow-xl ring-1 ring-accent/20">
+            <CheckCircle2 className="w-10 h-10 text-accent" />
           </div>
         </div>
         
-        <h2 className="text-4xl font-serif font-bold mb-4 text-primary leading-tight">Agendado com Sucesso!</h2>
-        <div className="max-w-[280px] mx-auto space-y-4 mb-12">
-            <p className="text-muted-foreground font-medium text-lg leading-relaxed">
+        <h2 className="text-2xl font-serif font-bold mb-3 text-primary leading-tight">Agendado com Sucesso!</h2>
+        <div className="max-w-[280px] mx-auto space-y-3 mb-8 px-4">
+            <p className="text-muted-foreground font-medium text-base leading-relaxed">
                Excelente escolha, <span className="text-primary font-bold">{formData.name.split(' ')[0]}</span>.
             </p>
-            <div className="p-6 bg-slate-50 rounded-[2rem] border border-border shadow-inner">
-               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">Sua Reserva</p>
-               <p className="font-serif font-bold text-2xl text-primary">
+            <div className="p-4 bg-slate-50 rounded-2xl border border-border shadow-inner">
+               <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-muted-foreground mb-2">Sua Reserva</p>
+               <p className="font-serif font-bold text-xl text-primary">
                   {format(data.date, "dd/MM")} <span className="text-accent mx-1">•</span> {data.time}
                </p>
-               <p className="text-[10px] font-bold uppercase tracking-widest text-primary/40 mt-2">{data.service?.name}</p>
+               <p className="text-[9px] font-bold uppercase tracking-widest text-primary/40 mt-1">{data.service?.name}</p>
             </div>
         </div>
 
-        <div className="space-y-4 px-8">
+        <div className="space-y-3 px-8">
           <Button 
-            className="w-full h-16 text-xl font-bold uppercase tracking-widest bg-primary hover:bg-primary/95 text-white rounded-2xl shadow-xl shadow-primary/20 transition-all border-none" 
+            className="w-full h-14 text-lg font-bold uppercase tracking-widest bg-primary hover:bg-primary/95 text-white rounded-xl shadow-lg transition-all border-none" 
             onClick={() => onComplete()}
           >
             Novo Agendamento
           </Button>
           <Button 
             variant="ghost" 
-            className="w-full h-14 text-sm font-bold uppercase tracking-widest text-muted-foreground hover:text-accent transition-colors" 
+            className="w-full h-10 text-[11px] font-bold uppercase tracking-widest text-muted-foreground hover:text-accent transition-colors" 
             onClick={() => window.location.reload()}
           >
             Sair do Aplicativo
@@ -126,14 +126,14 @@ export default function BookingStep4({ data, updateData, onBack, onComplete, log
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out fill-mode-both">
-      <div className="text-center space-y-2 mb-10">
-        <h2 className="text-3xl font-serif font-bold tracking-tight text-primary">Confirmar Reserva</h2>
-        <p className="text-muted-foreground text-sm font-medium">Revise seus dados para finalizar o agendamento.</p>
+    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out fill-mode-both">
+      <div className="text-center space-y-1 mb-4">
+        <h2 className="text-xl font-serif font-bold tracking-tight text-primary">Confirmar Reserva</h2>
+        <p className="text-muted-foreground text-[12px] font-medium leading-tight">Revise seus dados para finalizar o agendamento.</p>
       </div>
 
-      <Card className="bg-white border border-border rounded-[2.5rem] shadow-sm shadow-primary/5 overflow-hidden">
-        <CardContent className="p-8 space-y-6">
+      <Card className="bg-white border border-border rounded-2xl shadow-sm shadow-primary/5 overflow-hidden">
+        <CardContent className="p-4 space-y-4">
            <div className="flex items-center gap-5 group">
               <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-border group-hover:bg-primary/5 transition-colors">
                 <Scissors className="w-6 h-6 text-accent" />
@@ -188,11 +188,11 @@ export default function BookingStep4({ data, updateData, onBack, onComplete, log
         <div className="space-y-2">
           <Label htmlFor="phone" className="text-[10px] font-bold uppercase tracking-widest text-primary/60 ml-2">WhatsApp de Contato</Label>
           <div className="relative group">
-            <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-accent transition-colors" />
+            <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-accent transition-colors" />
             <Input 
               id="phone" 
               placeholder="(00) 00000-0000" 
-              className="pl-14 h-14 rounded-2xl bg-slate-50 border-border focus-visible:ring-accent font-bold tracking-widest shadow-inner tabular-nums"
+              className="pl-12 h-12 rounded-xl bg-slate-50 border-border focus-visible:ring-accent font-bold tracking-widest shadow-inner tabular-nums text-sm"
               required
               disabled={loading}
               value={formData.phone}
@@ -204,12 +204,12 @@ export default function BookingStep4({ data, updateData, onBack, onComplete, log
         <div className="space-y-2">
           <Label htmlFor="email" className="text-[10px] font-bold uppercase tracking-widest text-primary/60 ml-2">E-mail (Para Notificações)</Label>
           <div className="relative group">
-            <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-accent transition-colors" />
+            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-accent transition-colors" />
             <Input 
               id="email" 
               type="email" 
               placeholder="seu@exemplo.com" 
-              className="pl-14 h-14 rounded-2xl bg-slate-50 border-border focus-visible:ring-accent font-medium shadow-inner"
+              className="pl-12 h-12 rounded-xl bg-slate-50 border-border focus-visible:ring-accent font-medium shadow-inner text-sm"
               disabled={loading}
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -217,24 +217,24 @@ export default function BookingStep4({ data, updateData, onBack, onComplete, log
           </div>
         </div>
 
-        <div className="pt-8 space-y-6">
+        <div className="pt-4 space-y-4">
           <Button 
             type="submit" 
-            className="w-full h-20 text-2xl font-bold uppercase tracking-[0.1em] bg-accent hover:bg-accent/95 text-white rounded-[2rem] shadow-[0_15px_40px_-10px_rgba(222,0,0,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98] border-none" 
+            className="w-full h-14 text-lg font-bold uppercase tracking-widest bg-accent hover:bg-accent/95 text-white rounded-2xl shadow-lg transition-all hover:scale-[1.01] active:scale-[0.99] border-none" 
             disabled={loading}
           >
-            {loading ? <Loader2 className="w-8 h-8 animate-spin" /> : (
-               <span className="flex items-center gap-3">
+            {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+               <span className="flex items-center gap-2">
                   Confirmar Agendamento
-                  <ShieldCheck className="w-6 h-6 text-white/50" />
+                  <ShieldCheck className="w-5 h-5 text-white/50" />
                </span>
             )}
           </Button>
           
           <div className="flex justify-center">
-             <div className="flex items-center gap-3 py-4 px-6 bg-slate-50 border border-border rounded-full group hover:bg-white transition-colors cursor-pointer" onClick={onBack}>
-                <ChevronLeft className="w-4 h-4 text-primary group-hover:animate-bounce-x" />
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Alterar Detalhes</p>
+             <div className="flex items-center gap-2 py-3 px-5 bg-slate-50 border border-border rounded-full group hover:bg-white transition-colors cursor-pointer" onClick={onBack}>
+                <ChevronLeft className="w-3.5 h-3.5 text-primary group-hover:animate-bounce-x" />
+                <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-muted-foreground">Alterar Detalhes</p>
              </div>
           </div>
         </div>

@@ -24,14 +24,14 @@ export default function BookingStep3({ data, updateData, onNext, onBack }: any) 
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out fill-mode-both">
-      <div className="text-center space-y-2 mb-10">
-        <h2 className="text-3xl font-serif font-bold tracking-tight text-primary">Data & Horário</h2>
-        <p className="text-muted-foreground text-sm font-medium">Reserve o seu momento de tradição.</p>
+    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out fill-mode-both">
+      <div className="text-center space-y-1 mb-4">
+        <h2 className="text-xl font-serif font-bold tracking-tight text-primary">Data & Horário</h2>
+        <p className="text-muted-foreground text-[12px] font-medium leading-tight">Reserve o seu momento de tradição.</p>
       </div>
 
-      <div className="bg-white border border-border rounded-[2.5rem] p-6 shadow-sm shadow-primary/5 animate-in fade-in duration-700 relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 group-hover:bg-accent/5 transition-colors duration-1000" />
+      <div className="bg-white border border-border rounded-2xl p-4 shadow-sm shadow-primary/5 animate-in fade-in duration-700 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-12 -mt-12 group-hover:bg-accent/5 transition-colors duration-1000" />
         <Calendar
           mode="single"
           selected={date}
@@ -77,9 +77,9 @@ export default function BookingStep3({ data, updateData, onNext, onBack }: any) 
         </div>
       )}
 
-      <div className="pt-6 space-y-4">
+      <div className="pt-4 space-y-3">
         <Button 
-          className="w-full h-16 text-xl font-bold uppercase tracking-widest bg-primary hover:bg-primary/95 text-white rounded-2xl shadow-xl shadow-primary/20 disabled:grayscale transition-all active:scale-95 border-none" 
+          className="w-full h-14 text-lg font-bold uppercase tracking-widest bg-primary hover:bg-primary/95 text-white rounded-2xl shadow-lg shadow-primary/20 disabled:grayscale transition-all active:scale-95 border-none" 
           disabled={!date || !selectedTime}
           onClick={handleNext}
         >
@@ -92,9 +92,9 @@ export default function BookingStep3({ data, updateData, onNext, onBack }: any) 
         </Button>
         
         <div className="flex justify-center">
-           <div className="flex items-center gap-3 py-4 px-6 bg-slate-50 border border-border rounded-full group hover:bg-white transition-colors cursor-pointer" onClick={onBack}>
-              <ChevronLeft className="w-4 h-4 text-primary group-hover:animate-bounce-x" />
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Voltar para o Barbeiro</p>
+           <div className="flex items-center gap-2 py-3 px-5 bg-slate-50 border border-border rounded-full group hover:bg-white transition-colors cursor-pointer" onClick={onBack}>
+              <ChevronLeft className="w-3.5 h-3.5 text-primary group-hover:animate-bounce-x" />
+              <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-muted-foreground">Voltar para o Barbeiro</p>
            </div>
         </div>
       </div>

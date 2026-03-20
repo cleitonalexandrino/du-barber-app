@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -99,37 +100,43 @@ export default function CustomerAuth({ onLoginSuccess }: { onLoginSuccess: (cust
   };
 
   return (
-    <div className="min-h-[85vh] flex flex-col items-center justify-center p-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out fill-mode-both">
+    <div className="min-h-fit flex flex-col items-center justify-center p-4 animate-in fade-in slide-in-from-bottom-4 duration-1000 ease-out fill-mode-both">
       <div className="w-full max-w-md relative">
-        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 bg-primary/5 rounded-full blur-3xl -z-10 animate-pulse" />
+        <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-32 h-32 bg-primary/5 rounded-full blur-3xl -z-10 animate-pulse" />
         
-        <div className="text-center mb-12">
-           <div className="relative inline-flex items-center justify-center w-24 h-24 rounded-full bg-white border-8 border-slate-50 mb-6 shadow-2xl ring-1 ring-border">
-             <Scissors className="w-10 h-10 text-primary rotate-12" />
-             <div className="absolute -top-1 -right-1 bg-accent text-white p-1.5 rounded-full shadow-lg">
-                <Sparkles className="w-3.5 h-3.5" />
+        <div className="text-center mb-6">
+           <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-full bg-white border-4 border-slate-50 mb-4 shadow-xl ring-1 ring-border overflow-hidden">
+             <Image 
+               src="/logo.png" 
+               alt="Logo" 
+               width={64} 
+               height={64} 
+               className="object-contain" 
+             />
+             <div className="absolute -top-0.5 -right-0.5 bg-accent text-white p-1 rounded-full shadow-lg">
+                <Sparkles className="w-2.5 h-2.5" />
              </div>
            </div>
-           <h1 className="text-5xl font-serif font-bold tracking-tighter text-primary leading-none">Du Barber</h1>
-           <div className="flex items-center justify-center gap-3 mt-4">
-              <div className="h-px w-6 bg-accent/40" />
-              <p className="text-muted-foreground text-[10px] font-bold uppercase tracking-[0.3em] font-sans">Sua Experiência Premium</p>
-              <div className="h-px w-6 bg-accent/40" />
+           <h1 className="text-3xl font-serif font-bold tracking-tighter text-primary leading-none">Du Barber</h1>
+           <div className="flex items-center justify-center gap-2 mt-3">
+              <div className="h-px w-4 bg-accent/40" />
+              <p className="text-muted-foreground text-[8px] font-bold uppercase tracking-[0.2em] font-sans">Sua Experiência Premium</p>
+              <div className="h-px w-4 bg-accent/40" />
            </div>
         </div>
 
-        <Card className="bg-white border border-border shadow-[0_20px_60px_-15px_rgba(0,51,102,0.15)] rounded-[3rem] overflow-hidden">
-          <CardHeader className="p-10 pb-4 text-center">
-            <CardTitle className="text-3xl font-serif font-bold text-primary">
+        <Card className="bg-white border border-border shadow-[0_15px_40px_-10px_rgba(0,51,102,0.12)] rounded-3xl overflow-hidden">
+          <CardHeader className="p-6 pb-2 text-center">
+            <CardTitle className="text-xl font-serif font-bold text-primary">
                {isLogin ? "Bem-vindo de volta" : "Faça parte da história"}
             </CardTitle>
-            <CardDescription className="font-medium text-sm mt-2">
+            <CardDescription className="font-medium text-[13px] mt-1 line-clamp-2 px-2">
               {isLogin 
                 ? "Acesse seu perfil para reservar seu próximo corte." 
                 : "Cadastre-se e entre para o clube exclusivo da Du Barber."}
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-10 pt-4">
+          <CardContent className="p-6 pt-4">
             <form onSubmit={handleSubmit} className="space-y-6">
               {!isLogin && (
                 <div className="space-y-2">
@@ -212,12 +219,12 @@ export default function CustomerAuth({ onLoginSuccess }: { onLoginSuccess: (cust
                 {isLogin && <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest mt-2 ml-2 italic opacity-60">Padrão: cliente123</p>}
               </div>
 
-              <div className="pt-4 space-y-6">
-                 <Button type="submit" className="w-full h-20 text-2xl font-bold uppercase tracking-[0.1em] bg-primary hover:bg-primary/95 text-white rounded-[2rem] shadow-[0_15px_40px_-10px_rgba(0,51,102,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98] border-none" disabled={loading}>
-                    {loading ? <Loader2 className="w-8 h-8 animate-spin" /> : (
-                      <span className="flex items-center gap-3">
+              <div className="pt-2 space-y-4">
+                 <Button type="submit" className="w-full h-14 text-lg font-bold uppercase tracking-widest bg-primary hover:bg-primary/95 text-white rounded-2xl shadow-lg shadow-primary/20 transition-all hover:scale-[1.01] active:scale-[0.99] border-none" disabled={loading}>
+                    {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                      <span className="flex items-center gap-2">
                         {isLogin ? "Acessar Clube" : "Criar Minha Conta"}
-                        <ArrowRight className="w-6 h-6 text-accent" />
+                        <ArrowRight className="w-5 h-5 text-accent" />
                       </span>
                     )}
                  </Button>

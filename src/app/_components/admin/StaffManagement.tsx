@@ -292,97 +292,175 @@ export default function StaffManagement() {
             <p className="font-serif text-muted-foreground text-lg">Organizando as cadeiras...</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader className="bg-slate-50 border-b border-border">
-                <TableRow className="hover:bg-transparent border-0">
-                  <TableHead className="font-bold text-primary uppercase tracking-widest text-[10px] py-6 px-8">Artesão</TableHead>
-                  <TableHead className="font-bold text-primary uppercase tracking-widest text-[10px] py-6">Cargo / Especialidade</TableHead>
-                  <TableHead className="hidden md:table-cell font-bold text-primary uppercase tracking-widest text-[10px] py-6 text-center">Nível de Serviço</TableHead>
-                  <TableHead className="w-[150px] text-right py-6 px-8 font-bold text-primary uppercase tracking-widest text-[10px]">Gestão</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredStaff.length > 0 ? filteredStaff.map((member) => (
-                  <TableRow key={member.id} className="hover:bg-slate-50/80 border-border transition-all duration-300 group">
-                    <TableCell className="py-6 px-8">
-                        <div className="flex items-center gap-5">
-                          <div className="relative">
-                            <div className="absolute -inset-1 bg-primary/10 rounded-full blur-sm group-hover:bg-accent/20 transition-colors" />
-                            <img 
-                              src={member.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${member.name}`} 
-                              alt={member.name} 
-                              className="relative w-14 h-14 rounded-full border-2 border-white shadow-md bg-white object-cover group-hover:scale-105 transition-transform" 
-                            />
-                          </div>
-                          <div className="flex flex-col">
-                            <div className="flex items-center gap-2">
-                              <p className="font-serif font-bold text-xl text-primary leading-tight group-hover:text-accent transition-colors">{member.name}</p>
-                              {member.is_admin && (
-                                <span className="bg-accent text-white text-[8px] font-bold px-2 py-0.5 rounded-full border border-accent shadow-sm uppercase tracking-tighter">
-                                  Admin
-                                </span>
-                              )}
+          <>
+            {/* Tabela Desktop */}
+            <div className="hidden md:block overflow-x-auto">
+              <Table>
+                <TableHeader className="bg-slate-50 border-b border-border">
+                  <TableRow className="hover:bg-transparent border-0">
+                    <TableHead className="font-bold text-primary uppercase tracking-widest text-[10px] py-6 px-8">Artesão</TableHead>
+                    <TableHead className="font-bold text-primary uppercase tracking-widest text-[10px] py-6">Cargo / Especialidade</TableHead>
+                    <TableHead className="font-bold text-primary uppercase tracking-widest text-[10px] py-6 text-center">Nível de Serviço</TableHead>
+                    <TableHead className="w-[150px] text-right py-6 px-8 font-bold text-primary uppercase tracking-widest text-[10px]">Gestão</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredStaff.length > 0 ? filteredStaff.map((member) => (
+                    <TableRow key={member.id} className="hover:bg-slate-50/80 border-border transition-all duration-300 group">
+                      <TableCell className="py-6 px-8">
+                          <div className="flex items-center gap-5">
+                            <div className="relative">
+                              <div className="absolute -inset-1 bg-primary/10 rounded-full blur-sm group-hover:bg-accent/20 transition-colors" />
+                              <img 
+                                src={member.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${member.name}`} 
+                                alt={member.name} 
+                                className="relative w-14 h-14 rounded-full border-2 border-white shadow-md bg-white object-cover group-hover:scale-105 transition-transform" 
+                              />
                             </div>
-                            <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-0.5">Membro Ativo</p>
+                            <div className="flex flex-col">
+                              <div className="flex items-center gap-2">
+                                <p className="font-serif font-bold text-xl text-primary leading-tight group-hover:text-accent transition-colors">{member.name}</p>
+                                {member.is_admin && (
+                                  <span className="bg-accent text-white text-[8px] font-bold px-2 py-0.5 rounded-full border border-accent shadow-sm uppercase tracking-tighter">
+                                    Admin
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-0.5">Membro Ativo</p>
+                            </div>
                           </div>
+                      </TableCell>
+                      <TableCell className="text-sm font-bold text-primary/70">{member.specialty}</TableCell>
+                      <TableCell className="text-center">
+                        <div className="inline-flex items-center gap-1 px-3 py-1 bg-slate-50 rounded-full border border-border shadow-inner">
+                          <Star className="w-3.5 h-3.5 text-accent fill-accent" />
+                          <span className="text-sm font-bold text-primary tabular-nums tracking-tighter">{member.rating ? member.rating.toFixed(1) : '5.0'}</span>
                         </div>
-                    </TableCell>
-                    <TableCell className="text-sm font-bold text-primary/70">{member.specialty}</TableCell>
-                    <TableCell className="hidden md:table-cell text-center">
-                      <div className="inline-flex items-center gap-1 px-3 py-1 bg-slate-50 rounded-full border border-border shadow-inner">
-                        <Star className="w-3.5 h-3.5 text-accent fill-accent" />
-                        <span className="text-sm font-bold text-primary tabular-nums tracking-tighter">{member.rating.toFixed(1)}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right px-8">
-                      <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0">
-                        {!member.is_admin && (
+                      </TableCell>
+                      <TableCell className="text-right px-8">
+                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0">
+                          {!member.is_admin && (
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-10 w-10 bg-white border border-border rounded-xl text-muted-foreground hover:text-accent hover:border-accent hover:shadow-lg transition-all"
+                              title="Tornar Admin"
+                              onClick={() => { setMemberToAdmin(member); setIsAdminModalOpen(true); }}
+                            >
+                              <Shield className="h-4 w-4" />
+                            </Button>
+                          )}
                           <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-10 w-10 bg-white border border-border rounded-xl text-muted-foreground hover:text-accent hover:border-accent hover:shadow-lg transition-all"
-                            title="Tornar Admin"
-                            onClick={() => { setMemberToAdmin(member); setIsAdminModalOpen(true); }}
+                             variant="ghost" 
+                             size="icon" 
+                             className="h-10 w-10 bg-white border border-border rounded-xl text-muted-foreground hover:text-primary hover:border-primary hover:shadow-lg transition-all"
+                             onClick={() => {
+                                setEditingMember(member);
+                                setEditMemberData({
+                                   name: member.name,
+                                   role: member.specialty,
+                                   rating: member.rating
+                                });
+                                setIsEditModalOpen(true);
+                             }}
                           >
-                            <Shield className="h-4 w-4" />
+                            <Pencil className="h-4 w-4" />
                           </Button>
+                          <Button 
+                             variant="ghost" 
+                             size="icon" 
+                             className="h-10 w-10 bg-white border border-border rounded-xl text-muted-foreground hover:text-destructive hover:border-destructive hover:shadow-lg transition-all"
+                             onClick={() => { setMemberToDelete(member); setIsDeleteModalOpen(true); }}
+                          >
+                            <Trash className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )) : (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center py-32 text-muted-foreground font-serif text-lg">Nenhum oficial de barbearia encontrado.</TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Visualização Mobile (Cards) */}
+            <div className="md:hidden divide-y divide-border">
+              {filteredStaff.length > 0 ? filteredStaff.map((member) => (
+                <div key={member.id} className="p-6 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="relative">
+                        <img 
+                          src={member.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${member.name}`} 
+                          alt={member.name} 
+                          className="w-12 h-12 rounded-full border border-border bg-slate-50" 
+                        />
+                        {member.is_admin && (
+                          <div className="absolute -top-1 -right-1 bg-accent p-1 rounded-full border-2 border-white shadow-sm">
+                            <Shield className="w-2.5 h-2.5 text-white" />
+                          </div>
                         )}
-                        <Button 
-                           variant="ghost" 
-                           size="icon" 
-                           className="h-10 w-10 bg-white border border-border rounded-xl text-muted-foreground hover:text-primary hover:border-primary hover:shadow-lg transition-all"
-                           onClick={() => {
-                              setEditingMember(member);
-                              setEditMemberData({
-                                 name: member.name,
-                                 role: member.specialty,
-                                 rating: member.rating
-                              });
-                              setIsEditModalOpen(true);
-                           }}
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button 
-                           variant="ghost" 
-                           size="icon" 
-                           className="h-10 w-10 bg-white border border-border rounded-xl text-muted-foreground hover:text-destructive hover:border-destructive hover:shadow-lg transition-all"
-                           onClick={() => { setMemberToDelete(member); setIsDeleteModalOpen(true); }}
-                        >
-                          <Trash className="h-4 w-4" />
-                        </Button>
                       </div>
-                    </TableCell>
-                  </TableRow>
-                )) : (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center py-32 text-muted-foreground font-serif text-lg">Nenhum oficial de barbearia encontrado.</TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                      <div>
+                        <p className="font-serif font-bold text-lg text-primary leading-tight">{member.name}</p>
+                        <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-0.5">{member.specialty}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                       {!member.is_admin && (
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-9 w-9 bg-slate-50 border border-border rounded-xl text-accent"
+                          onClick={() => { setMemberToAdmin(member); setIsAdminModalOpen(true); }}
+                        >
+                          <Shield className="h-4 w-4" />
+                        </Button>
+                      )}
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-9 w-9 bg-slate-50 border border-border rounded-xl text-primary"
+                        onClick={() => {
+                          setEditingMember(member);
+                          setEditMemberData({
+                             name: member.name,
+                             role: member.specialty,
+                             rating: member.rating
+                          });
+                          setIsEditModalOpen(true);
+                        }}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-9 w-9 bg-slate-50 border border-border rounded-xl text-destructive"
+                        onClick={() => { setMemberToDelete(member); setIsDeleteModalOpen(true); }}
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-2xl border border-border/50 flex items-center justify-between">
+                    <div className="flex items-center gap-1 text-accent">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className={`w-3 h-3 ${i < Math.floor(member.rating || 5) ? 'fill-accent' : 'text-slate-200'}`} />
+                      ))}
+                    </div>
+                    <p className="font-serif font-black text-primary text-lg tabular-nums">{member.rating ? member.rating.toFixed(1) : '5.0'} <span className="text-[10px] font-bold text-muted-foreground uppercase opacity-50 ml-1">Rating</span></p>
+                  </div>
+                </div>
+              )) : (
+                <div className="p-20 text-center text-muted-foreground font-serif">Nenhum artesão encontrado.</div>
+              )}
+            </div>
+          </>
+
         )}
       </div>
 
