@@ -242,7 +242,11 @@ export default function CustomerAuth({ onLoginSuccess }: { onLoginSuccess: (cust
                     Senha
                   </Label>
                   {isLogin && (
-                    <button type="button" className="text-[9px] font-bold uppercase tracking-wider text-accent hover:text-primary transition-colors">
+                    <button 
+                      type="button" 
+                      onClick={() => toast.info("Para redefinir sua senha, entre em contato conosco pelo WhatsApp.")}
+                      className="text-[9px] font-bold uppercase tracking-wider text-accent hover:text-primary transition-colors"
+                    >
                       Esqueceu?
                     </button>
                   )}
