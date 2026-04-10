@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ChevronLeft, Star, Clock, Loader2, Sparkles, UserCheck } from "lucide-react";
+import { ChevronLeft, Star, Loader2, Sparkles, UserCheck, Scissors } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 export default function BookingStep2({ data, updateData, onNext, onBack }: any) {
@@ -17,14 +15,14 @@ export default function BookingStep2({ data, updateData, onNext, onBack }: any) 
         .from('barbers')
         .select('*')
         .order('name');
-      
+
       if (error) {
         console.error('Error fetching barbers:', error);
       } else {
         const list = data || [];
         setBarbers([
-           ...list, 
-           { id: 'any', name: 'Qualquer Profissional', specialty: 'Próximo horário livre', rating: 5.0, avatar_url: null }
+          ...list,
+          { id: 'any', name: 'Qualquer Profissional', specialty: 'Próximo horário livre', rating: 5.0, avatar_url: null }
         ]);
       }
       setLoading(false);
@@ -39,82 +37,114 @@ export default function BookingStep2({ data, updateData, onNext, onBack }: any) 
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center p-20 space-y-6">
-        <Loader2 className="w-12 h-12 animate-spin text-primary opacity-20" />
-        <p className="font-serif text-muted-foreground text-lg">Preparando a bancada...</p>
+      <div className="flex flex-col items-center justify-center p-20 space-y-5">
+        <Loader2 className="w-8 h-8 animate-spin text-accent" />
+        <p className="font-serif text-muted-foreground text-base italic">Preparando a bancada...</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out fill-mode-both">
-      <div className="text-center space-y-1 mb-4 relative">
-        <h2 className="text-xl font-serif font-bold tracking-tight text-primary">Escolha o Artesão</h2>
-        <p className="text-muted-foreground text-[12px] font-medium leading-tight">Quem cuidará do seu visual hoje?</p>
+    <div className="space-y-3">
+      {/* Section header */}
+      <div className="mb-5">
+        <h2 className="font-serif text-2xl font-bold text-primary tracking-tight">
+          Escolha o Artesão
+        </h2>
+        <p className="text-muted-foreground text-[13px] font-medium mt-1">
+          Quem cuidará do seu visual hoje?
+        </p>
       </div>
-      
-      <div className="grid grid-cols-1 gap-4">
-        {barbers.map((barber) => {
+
+      {/* Barber cards */}
+      <div className="space-y-2">
+        {barbers.map((barber, index) => {
           const isSelected = data.barber?.id === barber.id;
           const isAny = barber.id === 'any';
 
           return (
-            <div 
-              key={barber.id}
-              className={`relative cursor-pointer group transition-all duration-500 rounded-2xl overflow-hidden border ${isSelected ? 'border-accent shadow-xl shadow-accent/10 translate-y-[-2px]' : 'border-border hover:border-primary/50 hover:shadow-lg hover:translate-y-[-1px] bg-white'}`}
-              onClick={() => selectBarber(barber)}
-            >
-              {isSelected && (
-                <div className="absolute top-3 right-3 z-10">
-                   <div className="bg-accent text-white p-0.5 rounded-full shadow-lg">
-                      <Sparkles className="w-3 h-3" />
-                   </div>
-                </div>
-              )}
+            <div key={barber.id} className={`animate-card-enter stagger-${Math.min(index + 1, 5)}`}>
+              <button
+                type="button"
+                onClick={() => selectBarber(barber)}
+                className={`
+                  w-full text-left relative overflow-hidden
+                  border transition-all duration-250
+                  active:scale-[0.99] cursor-pointer
+                  ${isSelected
+                    ? 'bg-primary text-primary-foreground border-primary shadow-xl translate-y-[-2px]'
+                    : 'bg-card border-border hover:border-primary/40 hover:shadow-md hover:translate-y-[-1px]'
+                  }
+                `}
+              >
+                {/* Accent bar */}
+                {isSelected && (
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-accent animate-accent-bar" />
+                )}
 
-              <CardContent className="p-4 flex items-center gap-4">
-                <div className="relative">
-                   <div className={`absolute -inset-1 rounded-full blur-sm transition-colors duration-500 ${isSelected ? 'bg-accent/40' : 'bg-primary/5 group-hover:bg-primary/20'}`} />
-                   <Avatar className={`relative w-14 h-14 border-2 transition-all duration-500 ${isSelected ? 'border-accent scale-105' : 'border-white shadow-lg group-hover:scale-105'}`}>
-                      <AvatarImage src={barber.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${barber.name}`} className="object-cover" />
-                      <AvatarFallback className="bg-slate-50 text-primary font-serif font-bold">
+                <div className="flex items-center gap-4 p-4 pl-5">
+                  {/* Avatar */}
+                  <div className="relative flex-shrink-0">
+                    <Avatar className={`w-14 h-14 transition-all duration-250 ${isSelected ? 'ring-2 ring-accent ring-offset-2 ring-offset-primary' : 'ring-1 ring-border'}`}>
+                      <AvatarImage
+                        src={barber.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${barber.name}`}
+                        className="object-cover"
+                      />
+                      <AvatarFallback className={`font-serif font-bold text-xl ${isSelected ? 'bg-accent text-primary' : 'bg-secondary text-primary'}`}>
                         {barber.name.substring(0, 1)}
                       </AvatarFallback>
-                   </Avatar>
-                </div>
+                    </Avatar>
+                    {isSelected && (
+                      <div className="absolute -top-1 -right-1 animate-badge-pop">
+                        <div className="bg-accent w-5 h-5 rounded-full flex items-center justify-center">
+                          <Sparkles className="w-2.5 h-2.5 text-primary" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
-                <div className="flex-1 min-w-0">
-                  <h3 className={`font-serif font-bold text-lg transition-colors leading-tight ${isSelected ? 'text-accent' : 'text-primary group-hover:text-accent'}`}>
-                    {barber.name}
-                  </h3>
-                  <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest mt-0.5">{barber.specialty || barber.role}</p>
-                  
-                  {barber.rating && (
-                    <div className="flex items-center gap-1.5 mt-1.5 bg-slate-50 px-2.5 py-0.5 rounded-full border border-border/50 w-fit group-hover:bg-white transition-colors">
-                      <Star className="w-3 h-3 fill-accent text-accent" />
-                      <span className="text-[11px] font-bold text-primary tabular-nums">{barber.rating.toFixed(1)}</span>
-                    </div>
-                  )}
-                </div>
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <h3 className={`font-serif font-bold text-lg leading-tight ${isSelected ? 'text-primary-foreground' : 'text-primary'}`}>
+                      {barber.name}
+                    </h3>
+                    <p className={`text-[10px] font-bold uppercase tracking-wider mt-0.5 ${isSelected ? 'text-primary-foreground/50' : 'text-muted-foreground'}`}>
+                      {barber.specialty || barber.role}
+                    </p>
 
-                <div className={`transition-all duration-500 ${isSelected ? 'text-accent scale-110' : 'text-muted-foreground group-hover:text-primary group-hover:scale-110'}`}>
-                   {isAny ? <UserCheck className="w-8 h-8 opacity-20" /> : <Clock className="w-8 h-8 opacity-20" />}
-                </div>
-              </CardContent>
+                    {barber.rating && (
+                      <div className={`flex items-center gap-1 mt-1.5 w-fit px-2 py-0.5 ${isSelected ? 'bg-white/10' : 'bg-secondary'}`}>
+                        <Star className="w-3 h-3 fill-accent text-accent" />
+                        <span className={`text-[11px] font-bold tabular-nums ${isSelected ? 'text-primary-foreground' : 'text-primary'}`}>
+                          {barber.rating.toFixed(1)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
 
-              {isSelected && (
-                <div className="absolute inset-x-0 bottom-0 h-1 bg-accent animate-in fade-in slide-in-from-left duration-700" />
-              )}
+                  {/* Right icon */}
+                  <div className={`flex-shrink-0 ${isSelected ? 'text-accent' : 'text-muted-foreground/30'}`}>
+                    {isAny ? <UserCheck className="w-7 h-7" /> : <Scissors className="w-5 h-5" />}
+                  </div>
+                </div>
+              </button>
             </div>
           );
         })}
       </div>
 
-      <div className="pt-10 flex justify-center">
-         <div className="flex items-center gap-3 py-4 px-6 bg-slate-50 border border-border rounded-full group hover:bg-white transition-colors cursor-pointer" onClick={onBack}>
-            <ChevronLeft className="w-4 h-4 text-primary group-hover:animate-bounce-x" />
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Voltar para serviços</p>
-         </div>
+      {/* Back nav */}
+      <div className="pt-4 flex justify-center">
+        <button
+          type="button"
+          onClick={onBack}
+          className="flex items-center gap-2 py-2.5 px-5 border border-border bg-secondary/60 hover:bg-secondary transition-colors duration-200 cursor-pointer"
+        >
+          <ChevronLeft className="w-3.5 h-3.5 text-primary" />
+          <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            Voltar para serviços
+          </span>
+        </button>
       </div>
     </div>
   );

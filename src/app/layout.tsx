@@ -1,21 +1,24 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 
-const inter = Inter({ 
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  variable: '--font-serif', // MAPEADO PARA SERIF PARA COMPATIBILIDADE, MAS AGORA É MINIMALISTA
+  variable: "--font-serif",
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
-const outfit = Outfit({ 
+const inter = Inter({
   subsets: ["latin"],
-  variable: '--font-sans',
+  variable: "--font-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Du Barber - Tradição & Estilo",
+  title: "Du Barber — Tradição & Estilo",
   description: "O agendamento premium para o homem de bom gosto.",
 };
 
@@ -26,7 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body className={`${outfit.variable} ${inter.variable} font-sans antialiased bg-background text-foreground transition-all duration-500`}>
+      <body
+        className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-background text-foreground`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
